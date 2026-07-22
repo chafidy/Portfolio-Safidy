@@ -57,23 +57,24 @@
 }
 
 .project-card__thumb {
-  display: grid;
-  place-items: center;
+  display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  font-size: var(--text-4xl);
-  background: var(--clay-purple-100);
-  /* object-fit est sans effet sur les vignettes emoji restantes (div) :
-     ne s'applique qu'aux vraies photos de projet (img). "contain" pour
-     montrer l'image entière, jamais recadrée, dans le carré. */
-  object-fit: contain;
+  height: 100%;
+  /* "cover" pour remplir le carré uniformément sur toute la grille,
+     quitte à recadrer légèrement les bords des photos non carrées. */
+  object-fit: cover;
   transition: transform var(--dur-med) var(--ease-clay);
 }
 
+/* Le carré vit ici, sur le conteneur — pas sur l'<img>. Un <img> qui a
+   une taille intrinsèque (attributs width/height) ignore aspect-ratio
+   en CSS ; un conteneur non remplacé comme ce <a> n'a pas ce problème. */
 .project-card__thumb-trigger {
   position: relative;
   display: block;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+  background: var(--clay-purple-100);
 }
 
 .project-card__thumb-trigger:hover .project-card__thumb,

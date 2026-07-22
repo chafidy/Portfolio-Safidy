@@ -68,7 +68,7 @@ js/
     └── lightbox.js            Aperçu plein écran des photos de projet
 assets/
 ├── img/                     avatar-assis.png, avatar-debout.png, ...
-├── project/                 Photos des projets (p1.png à p9.png)
+├── project/                 Photos des 12 projets (p1.png à p12.png)
 ├── icons/                   (vide — icônes clay PNG à ajouter)
 └── fonts/                   (vide — Google Fonts en fallback CDN)
 ```
@@ -133,10 +133,6 @@ réservée à un seul service). Aucune modification CSS/JS nécessaire.
   des `href="#"` en attente — le contenu source ne fournissait pas
   d'URL corrigée pour ces deux réseaux (contrairement à LinkedIn,
   Behance et GitHub, déjà corrigés).
-- **Images de projets** : les cartes utilisent un pictogramme emoji en
-  guise de vignette (`.project-card__thumb`) en l'absence de visuels
-  projet fournis — à remplacer par de vraies captures dans
-  `assets/img/` le moment venu.
 - **Mode sombre** : `theme.js` est prêt (structure uniquement) mais
   n'a pas de bouton `[data-theme-toggle]` ni de tokens dark dans
   `_tokens.css` — à ajouter si le mode sombre est souhaité.
