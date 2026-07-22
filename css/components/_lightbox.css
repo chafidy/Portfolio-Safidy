@@ -1,0 +1,50 @@
+/**
+ * FICHIER : _lightbox.css
+ * RÔLE    : Aperçu plein écran d'une image (utilisé par les photos de
+ *           projet). S'appuie sur l'élément natif <dialog> : focus,
+ *           gestion d'Échap et ::backdrop viennent du navigateur, sans
+ *           JS dédié à la mécanique de modale (voir js/modules/lightbox.js
+ *           pour l'ouverture/fermeture au clic).
+ * DÉPEND  : _tokens.css
+ */
+
+.lightbox {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3);
+  max-width: min(92vw, 960px);
+  max-height: 90vh;
+  background: var(--clay-white);
+  box-shadow: var(--shadow-clay-lg);
+}
+
+.lightbox::backdrop {
+  background: rgba(42, 42, 46, .72);
+}
+
+.lightbox__image {
+  display: block;
+  max-width: 100%;
+  max-height: calc(90vh - var(--sp-8));
+  border-radius: var(--radius-md);
+  margin-inline: auto;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--clay-white);
+  box-shadow: var(--shadow-clay-sm);
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.lightbox__close:hover {
+  color: var(--clay-purple-600);
+}

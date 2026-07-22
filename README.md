@@ -44,7 +44,8 @@ css/
 │   ├── _cards.css            .card générique (services), --featured
 │   ├── _tags.css             Tags de catégorie + pilules de filtre
 │   ├── _forms.css            Champs de formulaire, focus, état d'erreur
-│   └── _cubes.css            Cubes décoratifs flottants (hero)
+│   ├── _cubes.css            Cubes décoratifs flottants (hero)
+│   └── _lightbox.css         Aperçu plein écran (<dialog>) des photos de projet
 └── sections/
     ├── _hero.css              Dont la rotation des rôles en CSS pur
     ├── _about.css
@@ -63,9 +64,11 @@ js/
     ├── counter.js             Compteurs animés (À propos)
     ├── filter.js              Filtrage des projets par catégorie
     ├── form.js                Validation temps réel + simulation d'envoi
-    └── theme.js               Préparation dark mode (structure seulement)
+    ├── theme.js               Préparation dark mode (structure seulement)
+    └── lightbox.js            Aperçu plein écran des photos de projet
 assets/
 ├── img/                     avatar-assis.png, avatar-debout.png, ...
+├── project/                 Photos des projets (p1.png à p9.png)
 ├── icons/                   (vide — icônes clay PNG à ajouter)
 └── fonts/                   (vide — Google Fonts en fallback CDN)
 ```

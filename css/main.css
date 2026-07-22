@@ -24,6 +24,7 @@
 @import url('components/_tags.css');
 @import url('components/_forms.css');
 @import url('components/_cubes.css');
+@import url('components/_lightbox.css');
 
 /* Sections */
 @import url('sections/_hero.css');

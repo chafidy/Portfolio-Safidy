@@ -1,7 +1,11 @@
 /**
  * FICHIER : _process.css
  * RÔLE    : Timeline du processus de travail — verticale sur mobile,
- *           horizontale à partir de 900px.
+ *           horizontale à partir de 900px. La ligne se dessine
+ *           progressivement d'étape en étape au scroll (via .is-visible,
+ *           posée par reveal.js sur .process__step), puis "coule" en
+ *           boucle infinie (dégradé répété animé, CSS pur — fonctionne
+ *           aussi sans JavaScript).
  * DÉPEND  : _tokens.css, _grid.css
  */
 
@@ -25,13 +29,45 @@
   top: 44px;
   width: 2px;
   height: calc(100% + var(--sp-5) - 44px);
-  background: var(--clay-purple-100);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--clay-purple-300) 0 8px,
+    var(--clay-purple-100) 8px 16px
+  );
+  background-size: 100% 16px;
+  animation: process-line-flow-y 1s linear infinite;
 }
+
+@keyframes process-line-flow-y {
+  to { background-position: 0 16px; }
+}
+
+/* Dessin progressif de la ligne : n'a d'effet qu'avec JS actif (.has-js) —
+   sans JS, la ligne reste pleinement visible dès le départ (voir _grid.css). */
+.has-js .process__step:not(:last-child)::after {
+  transform: scaleY(0);
+  transform-origin: top;
+  /* Propriétés longues (pas le raccourci "transition") : le raccourci
+     réinitialiserait transition-delay à 0, écrasant le décalage par
+     étape défini plus bas via :nth-child, malgré l'ordre des règles. */
+  transition-property: transform;
+  transition-duration: var(--dur-slow);
+  transition-timing-function: var(--ease-clay);
+}
+
+.has-js .process__step.is-visible:not(:last-child)::after {
+  transform: scaleY(1);
+}
+
+.process__step:nth-child(1)::after { transition-delay: 0ms; }
+.process__step:nth-child(2)::after { transition-delay: 150ms; }
+.process__step:nth-child(3)::after { transition-delay: 300ms; }
 
 .process__number {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;
   width: 40px;
   height: 40px;
   display: grid;
@@ -67,10 +103,32 @@
   }
 
   .process__step:not(:last-child)::after {
-    left: 50%;
+    /* Part du bord droit du cercle (50% + son rayon), pas de son centre,
+       et rejoint le bord gauche du cercle suivant en traversant le gap. */
+    left: calc(50% + 20px);
     top: 19px;
-    width: calc(100% - 40px);
+    width: calc(100% - 40px + var(--sp-3));
     height: 2px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--clay-purple-300) 0 8px,
+      var(--clay-purple-100) 8px 16px
+    );
+    background-size: 16px 100%;
+    animation-name: process-line-flow-x;
+  }
+
+  @keyframes process-line-flow-x {
+    to { background-position: 16px 0; }
+  }
+
+  .has-js .process__step:not(:last-child)::after {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .has-js .process__step.is-visible:not(:last-child)::after {
+    transform: scaleX(1);
   }
 
   .process__number {
@@ -80,5 +138,18 @@
 
   .process__text {
     margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-js .process__step:not(:last-child)::after {
+    transform: none;
+    transition: none;
+  }
+
+  .process__step:not(:last-child)::after {
+    animation: none;
+    background-image: none;
+    background-color: var(--clay-purple-100);
   }
 }

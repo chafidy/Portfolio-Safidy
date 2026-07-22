@@ -59,9 +59,53 @@
 .project-card__thumb {
   display: grid;
   place-items: center;
-  height: 160px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   font-size: var(--text-4xl);
   background: var(--clay-purple-100);
+  /* object-fit est sans effet sur les vignettes emoji restantes (div) :
+     ne s'applique qu'aux vraies photos de projet (img). "contain" pour
+     montrer l'image entière, jamais recadrée, dans le carré. */
+  object-fit: contain;
+  transition: transform var(--dur-med) var(--ease-clay);
+}
+
+.project-card__thumb-trigger {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.project-card__thumb-trigger:hover .project-card__thumb,
+.project-card__thumb-trigger:focus-visible .project-card__thumb {
+  transform: scale(1.05);
+}
+
+/* Voile + libellé révélant l'affordance "cliquable" au survol/focus.
+   Texte plutôt qu'une icône emoji : rendu fiable quelle que soit la
+   police du navigateur. z-index garantit qu'il reste au-dessus de
+   l'image, qui crée son propre contexte d'empilement une fois zoomée
+   (transform:scale au survol). */
+.project-card__thumb-trigger::after {
+  content: 'Agrandir';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  letter-spacing: .04em;
+  background: rgba(42, 42, 46, .45);
+  opacity: 0;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.project-card__thumb-trigger:hover::after,
+.project-card__thumb-trigger:focus-visible::after {
+  opacity: 1;
 }
 
 .project-card__body {
@@ -78,7 +122,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .project-card,
-  .project-card > article:hover {
+  .project-card > article:hover,
+  .project-card__thumb,
+  .project-card__thumb-trigger:hover .project-card__thumb,
+  .project-card__thumb-trigger:focus-visible .project-card__thumb {
     transition: none;
     transform: none;
   }
