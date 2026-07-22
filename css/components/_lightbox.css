@@ -41,8 +41,12 @@
   border-radius: var(--radius-pill);
   background: var(--clay-white);
   box-shadow: var(--shadow-clay-sm);
-  font-size: var(--text-lg);
-  line-height: 1;
+  color: var(--clay-ink);
+}
+
+.lightbox__close svg {
+  width: 20px;
+  height: 20px;
 }
 
 .lightbox__close:hover {
