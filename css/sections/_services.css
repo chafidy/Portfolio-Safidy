@@ -1,0 +1,11 @@
+/**
+ * FICHIER : _services.css
+ * RÔLE    : Mise en page propre à la section Services (l'apparence des
+ *           cartes elles-mêmes vit dans components/_cards.css).
+ * DÉPEND  : _tokens.css, _grid.css, _cards.css, _buttons.css
+ */
+
+.services__cta {
+  margin-top: var(--sp-6);
+  text-align: center;
+}

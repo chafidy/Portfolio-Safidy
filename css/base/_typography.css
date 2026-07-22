@@ -1,0 +1,116 @@
+/**
+ * FICHIER : _typography.css
+ * RÔLE    : Styles de texte globaux (corps, titres, liens, focus visible).
+ *           Les composants ne redéfinissent la typographie que pour des
+ *           cas spécifiques (boutons, tags) — tout le reste hérite d'ici.
+ * DÉPEND  : _tokens.css
+ */
+
+body {
+  font-family: var(--font-body);
+  background: var(--clay-cream);
+  color: var(--clay-ink);
+  font-size: var(--text-base);
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  color: var(--clay-ink);
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, var(--text-5xl));
+  line-height: 1.08;
+}
+
+h2 {
+  font-size: var(--text-3xl);
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-xl);
+}
+
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-lg);
+}
+
+p {
+  color: var(--clay-ink-soft);
+}
+
+.lead {
+  font-size: var(--text-lg);
+  color: var(--clay-ink-soft);
+  max-width: 56ch;
+}
+
+small,
+.text-small {
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: .82em;
+  background: var(--clay-purple-100);
+  padding: 2px 8px;
+  border-radius: 8px;
+  color: var(--clay-purple-600);
+}
+
+/* Label discret au-dessus des titres de section (ex. "01 · Principes") */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--clay-purple-500);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--sp-2);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+  background: var(--clay-purple-500);
+  display: inline-block;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, .6);
+}
+
+a {
+  transition: color var(--dur-fast) ease;
+}
+
+a:hover {
+  color: var(--clay-purple-600);
+}
+
+/* Focus visible cohérent sur tous les éléments interactifs (clavier) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--clay-honey);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}

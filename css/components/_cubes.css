@@ -1,0 +1,64 @@
+/**
+ * FICHIER : _cubes.css
+ * RÔLE    : Cubes décoratifs flottants (actuellement utilisés dans le
+ *           hero). Composant isolé pour pouvoir être réemployé sur
+ *           d'autres sections sans dupliquer l'animation.
+ * DÉPEND  : _tokens.css
+ */
+
+.cube {
+  position: absolute;
+  border-radius: 18px;
+  box-shadow: var(--shadow-clay-md);
+  animation: cube-float 6s ease-in-out infinite;
+}
+
+.cube--c1 {
+  width: 56px;
+  height: 56px;
+  background: var(--clay-purple-500);
+  top: 8%;
+  right: 6%;
+  animation-delay: 0s;
+}
+
+.cube--c2 {
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  background: var(--clay-honey);
+  top: 60%;
+  right: 14%;
+  animation-delay: 1.2s;
+}
+
+.cube--c3 {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: var(--clay-purple-100);
+  top: 32%;
+  right: 24%;
+  animation-delay: 2.1s;
+}
+
+.cube--c4 {
+  width: 30px;
+  height: 30px;
+  border-radius: 11px;
+  background: var(--clay-white);
+  top: 75%;
+  right: 4%;
+  animation-delay: .7s;
+}
+
+@keyframes cube-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-14px) rotate(3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cube {
+    animation: none;
+  }
+}

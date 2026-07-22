@@ -1,0 +1,158 @@
+/**
+ * FICHIER : _hero.css
+ * RÔLE    : Section d'accueil — titre, sous-titre en rotation (CSS pur),
+ *           CTA, micro-preuves, avatar et cubes décoratifs.
+ * DÉPEND  : _tokens.css, _grid.css, _buttons.css, _cubes.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Conteneur & grille
+ *   2. Contenu texte
+ *   3. Rotation des rôles (animation CSS)
+ *   4. Actions & micro-preuves
+ *   5. Visuel (avatar)
+ */
+
+/* 1. Conteneur & grille */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--sp-8) var(--sp-10);
+}
+
+.hero__inner {
+  display: grid;
+  gap: var(--sp-6);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1.1fr .9fr;
+    gap: var(--sp-8);
+  }
+}
+
+.hero__cubes {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-cubes);
+  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hero__cubes {
+    display: block;
+  }
+}
+
+/* 2. Contenu texte */
+.hero__content {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+.hero__title {
+  margin-top: var(--sp-1);
+}
+
+.hero__title-accent {
+  color: var(--clay-purple-500);
+}
+
+.hero__lead {
+  margin-top: var(--sp-3);
+}
+
+/* 3. Rotation des rôles (animation CSS, sans JS) */
+.hero__roles {
+  position: relative;
+  height: 1.6em;
+  margin-top: var(--sp-2);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-lg);
+  color: var(--clay-purple-600);
+}
+
+.hero__role {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: role-fade 9s ease-in-out infinite;
+}
+
+.hero__role:nth-child(1) { animation-delay: 0s; }
+.hero__role:nth-child(2) { animation-delay: 3s; }
+.hero__role:nth-child(3) { animation-delay: 6s; }
+
+@keyframes role-fade {
+  0%, 3% { opacity: 0; transform: translateY(6px); }
+  10%, 28% { opacity: 1; transform: translateY(0); }
+  35%, 100% { opacity: 0; transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__role {
+    position: static;
+    animation: none;
+    opacity: 1;
+    display: none;
+  }
+
+  .hero__role:first-child {
+    display: block;
+  }
+
+  .hero__roles {
+    height: auto;
+  }
+}
+
+/* 4. Actions & micro-preuves */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.hero__proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  margin-top: var(--sp-4);
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+.hero__proof-item {
+  position: relative;
+  padding-left: var(--sp-2);
+}
+
+.hero__proof-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clay-honey);
+}
+
+/* 5. Visuel (avatar) */
+.hero__visual {
+  position: relative;
+  z-index: var(--z-content);
+  justify-self: center;
+}
+
+.hero__avatar {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  filter: drop-shadow(var(--shadow-float));
+}

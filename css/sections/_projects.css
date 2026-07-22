@@ -1,0 +1,85 @@
+/**
+ * FICHIER : _projects.css
+ * RÔLE    : Grille de projets et transition douce de filtrage. Les tags
+ *           et pilules de filtre eux-mêmes vivent dans components/_tags.css.
+ * DÉPEND  : _tokens.css, _grid.css, _tags.css
+ */
+
+.projects__status {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.project-card {
+  transition: opacity var(--dur-med) ease, transform var(--dur-med) var(--ease-clay);
+}
+
+.project-card--hidden {
+  opacity: 0;
+  transform: scale(.92);
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.project-card > article {
+  background: var(--clay-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 100%;
+  box-shadow: var(--shadow-clay-md);
+  transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
+}
+
+.project-card > article:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-clay-lg);
+}
+
+.project-card__thumb {
+  display: grid;
+  place-items: center;
+  height: 160px;
+  font-size: var(--text-4xl);
+  background: var(--clay-purple-100);
+}
+
+.project-card__body {
+  padding: var(--sp-3);
+}
+
+.project-card__title {
+  margin-bottom: var(--sp-1);
+}
+
+.project-card__text {
+  font-size: var(--text-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card > article:hover {
+    transition: none;
+    transform: none;
+  }
+}

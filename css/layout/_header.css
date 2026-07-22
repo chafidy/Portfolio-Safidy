@@ -1,0 +1,177 @@
+/**
+ * FICHIER : _header.css
+ * RÔLE    : Header sticky (nav pilule desktop, menu burger mobile).
+ *           L'état "collé/translucide" est piloté par la classe
+ *           .header--scrolled, ajoutée par js/modules/navigation.js.
+ * DÉPEND  : _tokens.css, _grid.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Header (conteneur sticky)
+ *   2. Logo
+ *   3. Burger (mobile)
+ *   4. Navigation (pilule desktop / panneau mobile)
+ */
+
+/* 1. Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  width: 100%;
+  background: transparent;
+  transition: background var(--dur-med) ease, box-shadow var(--dur-med) ease, backdrop-filter var(--dur-med) ease;
+}
+
+.header--scrolled {
+  background: rgba(251, 250, 247, .78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: var(--header-height);
+}
+
+/* 2. Logo */
+.header__logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-xl);
+  color: var(--clay-ink);
+}
+
+.header__logo:hover {
+  color: var(--clay-purple-600);
+}
+
+/* 3. Burger (visible uniquement < 900px) */
+/* z-index supérieur au panneau .header__nav : il doit rester cliquable
+   par-dessus pour permettre de refermer le menu une fois ouvert. */
+.header__burger {
+  position: relative;
+  z-index: calc(var(--z-overlay) + 1);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  gap: 5px;
+  background: var(--clay-white);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.header__burger-line {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--clay-ink);
+  position: absolute;
+  transition: transform var(--dur-med) var(--ease-clay), opacity var(--dur-fast) ease;
+}
+
+.header__burger-line:nth-child(1) { transform: translateY(-6px); }
+.header__burger-line:nth-child(2) { transform: translateY(0); }
+.header__burger-line:nth-child(3) { transform: translateY(6px); }
+
+.header__burger[aria-expanded="true"] .header__burger-line:nth-child(1) {
+  transform: translateY(0) rotate(45deg);
+}
+
+.header__burger[aria-expanded="true"] .header__burger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.header__burger[aria-expanded="true"] .header__burger-line:nth-child(3) {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* 4. Navigation */
+.header__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header__nav-link {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-base);
+  color: var(--clay-ink-soft);
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.header__nav-link:hover {
+  color: var(--clay-purple-600);
+  background: var(--clay-purple-100);
+}
+
+.header__nav-link[aria-current="page"] {
+  background: var(--clay-purple-500);
+  color: #fff;
+  box-shadow: var(--shadow-pill-active);
+}
+
+/* Mobile (base) : panneau coulissant depuis la droite */
+.header__nav {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(80vw, 320px);
+  height: 100vh;
+  z-index: var(--z-overlay);
+  background: var(--clay-white);
+  box-shadow: var(--shadow-clay-lg);
+  padding: calc(var(--header-height) + var(--sp-3)) var(--sp-3) var(--sp-3);
+  transform: translateX(100%);
+  transition: transform var(--dur-med) var(--ease-clay);
+}
+
+.header__nav--open {
+  transform: translateX(0);
+}
+
+@media (min-width: 900px) {
+  .header__burger {
+    display: none;
+  }
+
+  .header__nav {
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    z-index: auto;
+    background: var(--clay-white);
+    border-radius: var(--radius-pill);
+    padding: 8px;
+    box-shadow: var(--shadow-clay-md);
+    transform: none;
+    transition: none;
+  }
+
+  .header__nav-list {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .header__nav-link {
+    font-size: var(--text-sm);
+    padding: 11px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .header__nav,
+  .header__burger-line {
+    transition: none;
+  }
+}

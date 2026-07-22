@@ -1,0 +1,108 @@
+/**
+ * FICHIER : _about.css
+ * RÔLE    : Section À propos — texte, piliers, chiffres clés animés et
+ *           visuel avatar.
+ * DÉPEND  : _tokens.css, _grid.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Grille générale
+ *   2. Texte & piliers
+ *   3. Chiffres clés
+ *   4. Visuel
+ */
+
+/* 1. Grille générale */
+.about__inner {
+  display: grid;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 900px) {
+  .about__inner {
+    grid-template-columns: .85fr 1.15fr;
+    align-items: center;
+    gap: var(--sp-8);
+  }
+
+  .about__visual {
+    order: -1;
+  }
+}
+
+/* 2. Texte & piliers */
+.about__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  max-width: 62ch;
+}
+
+.about__pillars {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+@media (min-width: 640px) {
+  .about__pillars {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pillar {
+  background: var(--clay-white);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3);
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.pillar__title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--sp-1);
+}
+
+.pillar__text {
+  font-size: var(--text-sm);
+}
+
+/* 3. Chiffres clés */
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+  margin-top: var(--sp-6);
+}
+
+@media (min-width: 640px) {
+  .about__stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat__value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-3xl);
+  color: var(--clay-purple-500);
+  line-height: 1;
+}
+
+.stat__label {
+  margin-top: 6px;
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+/* 4. Visuel */
+.about__visual {
+  justify-self: center;
+}
+
+.about__avatar {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  filter: drop-shadow(var(--shadow-float));
+}

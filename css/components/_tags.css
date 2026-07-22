@@ -1,0 +1,86 @@
+/**
+ * FICHIER : _tags.css
+ * RÔLE    : Badges de catégorie (tags) sur les cartes projet, et pilules
+ *           de filtre (boutons togglables) au-dessus de la grille.
+ * DÉPEND  : _tokens.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Tags (badges de catégorie, lecture seule)
+ *   2. Pilules de filtre (boutons interactifs)
+ */
+
+/* 1. Tags */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--sp-2);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  padding: 7px 16px;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.tag--purple {
+  background: var(--clay-purple-100);
+  color: var(--clay-purple-600);
+}
+
+.tag--honey {
+  background: var(--tag-honey-bg);
+  color: var(--tag-honey-text);
+}
+
+.tag--leaf {
+  background: var(--tag-leaf-bg);
+  color: var(--tag-leaf-text);
+}
+
+.tag--ink {
+  background: var(--clay-ink);
+  color: var(--clay-white);
+}
+
+/* 2. Pilules de filtre */
+.filter-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-top: var(--sp-4);
+}
+
+.filter-pill {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+  background: var(--clay-white);
+  padding: 11px 22px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-clay-sm);
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.filter-pill:hover {
+  color: var(--clay-purple-600);
+}
+
+.filter-pill--active {
+  background: var(--clay-purple-500);
+  color: #fff;
+  box-shadow: var(--shadow-pill-active);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-pill {
+    transition: none;
+  }
+}

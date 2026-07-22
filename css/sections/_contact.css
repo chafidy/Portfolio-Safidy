@@ -1,0 +1,40 @@
+/**
+ * FICHIER : _contact.css
+ * RÔLE    : Mise en page de la section Contact (intro + coordonnées à
+ *           gauche, formulaire à droite dès 900px). Le formulaire
+ *           lui-même vit dans components/_forms.css.
+ * DÉPEND  : _tokens.css, _grid.css, _forms.css
+ */
+
+.contact__inner {
+  display: grid;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 900px) {
+  .contact__inner {
+    grid-template-columns: .9fr 1.1fr;
+    gap: var(--sp-8);
+  }
+}
+
+.contact__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.contact__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact__info-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--clay-purple-500);
+}

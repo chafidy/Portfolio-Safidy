@@ -1,0 +1,144 @@
+/**
+ * FICHIER : _grid.css
+ * RÔLE    : Conteneurs et rythme vertical partagés par toutes les sections,
+ *           les utilitaires de layout transverses (skip-link, reveal), et
+ *           le footer — traité comme le header, un élément de layout
+ *           global plutôt qu'une section de contenu (pas de fichier dédié
+ *           dans l'architecture prévue).
+ * DÉPEND  : _tokens.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Conteneur & rythme vertical
+ *   2. Lien d'évitement
+ *   3. Sentinelle header sticky
+ *   4. Apparition au scroll (reveal)
+ *   5. Footer
+ */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+/* Rythme vertical commun à toutes les sections du <main> */
+main > section {
+  padding-block: var(--sp-8);
+}
+
+@media (min-width: 900px) {
+  main > section {
+    padding-block: var(--sp-10);
+  }
+}
+
+@media (min-width: 1200px) {
+  main > section {
+    padding-block: var(--sp-12);
+  }
+}
+
+/* Lien d'évitement — visible uniquement au focus clavier */
+.skip-link {
+  position: fixed;
+  top: var(--sp-1);
+  left: var(--sp-1);
+  z-index: var(--z-overlay);
+  background: var(--clay-ink);
+  color: var(--clay-white);
+  font-family: var(--font-display);
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  transform: translateY(-150%);
+  transition: transform var(--dur-fast) ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Sentinelle 1px utilisée par navigation.js (IntersectionObserver) pour
+   détecter le passage en mode "header--scrolled" sans listener de scroll. */
+.header-sentinel {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+}
+
+/* Apparition au scroll (reveal.js). Scopé sous .has-js (ajoutée par
+   main.js) : sans JavaScript, [data-reveal] reste visible par défaut. */
+.has-js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur-slow) ease, transform var(--dur-slow) var(--ease-clay);
+}
+
+.has-js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* 5. Footer */
+.site-footer {
+  padding-block: var(--sp-6);
+  border-top: 1px solid var(--clay-purple-100);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  text-align: center;
+}
+
+.site-footer__baseline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--clay-ink);
+}
+
+.site-footer__nav ul,
+.site-footer__social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+}
+
+.site-footer__nav a,
+.site-footer__social a {
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+.site-footer__nav a:hover,
+.site-footer__social a:hover {
+  color: var(--clay-purple-600);
+}
+
+@media (min-width: 900px) {
+  .site-footer__inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    row-gap: var(--sp-2);
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .site-footer__nav ul,
+  .site-footer__social {
+    justify-content: flex-start;
+  }
+}

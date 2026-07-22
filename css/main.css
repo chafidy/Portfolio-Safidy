@@ -1,0 +1,36 @@
+/**
+ * FICHIER : main.css
+ * RÔLE    : Point d'entrée unique des styles. Ne contient AUCUNE règle
+ *           propre — uniquement des @import, dans l'ordre de cascade
+ *           voulu (tokens → reset → typographie → layout → composants →
+ *           sections).
+ * NOTE    : L'ordre est important : les tokens doivent être chargés avant
+ *           tout le reste, et les sections en dernier pour pouvoir
+ *           surcharger les composants génériques si nécessaire.
+ */
+
+/* Base */
+@import url('base/_tokens.css');
+@import url('base/_reset.css');
+@import url('base/_typography.css');
+
+/* Layout */
+@import url('layout/_grid.css');
+@import url('layout/_header.css');
+
+/* Composants */
+@import url('components/_buttons.css');
+@import url('components/_cards.css');
+@import url('components/_tags.css');
+@import url('components/_forms.css');
+@import url('components/_cubes.css');
+
+/* Sections */
+@import url('sections/_hero.css');
+@import url('sections/_about.css');
+@import url('sections/_services.css');
+@import url('sections/_process.css');
+@import url('sections/_projects.css');
+@import url('sections/_testimonials.css');
+@import url('sections/_community.css');
+@import url('sections/_contact.css');

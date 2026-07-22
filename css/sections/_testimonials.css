@@ -1,0 +1,60 @@
+/**
+ * FICHIER : _testimonials.css
+ * RÔLE    : Grille de témoignages — 1 colonne sur mobile, 3 colonnes à
+ *           partir de 1200px.
+ * DÉPEND  : _tokens.css, _grid.css
+ */
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+@media (min-width: 640px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .testimonial-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.testimonial {
+  background: var(--clay-white);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-clay-sm);
+  position: relative;
+}
+
+.testimonial__quote {
+  font-size: var(--text-sm);
+  color: var(--clay-ink-soft);
+}
+
+.testimonial__quote p::before {
+  content: '“';
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  color: var(--clay-purple-300);
+  line-height: 0;
+  display: inline-block;
+  vertical-align: -12px;
+  margin-right: 4px;
+}
+
+.testimonial__author {
+  margin-top: var(--sp-3);
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--clay-ink);
+}
+
+.testimonial__author cite {
+  font-style: normal;
+}

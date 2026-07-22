@@ -1,0 +1,121 @@
+/**
+ * FICHIER : _tokens.css
+ * RÔLE    : Source unique de vérité pour toutes les valeurs de design
+ *           (couleurs, ombres, rayons, typographie, espacements, mouvement,
+ *           mise en page, z-index). Repris à l'identique du design system
+ *           « Clay System v1.0 » (design-system-safidy.html).
+ * DÉPEND  : rien (chargé en premier par main.css)
+ *
+ * TABLE DES MATIÈRES
+ *   1. Couleurs primaires (palette avatar)
+ *   2. Neutres chauds
+ *   3. Accents
+ *   4. États (succès / erreur)
+ *   5. Ombres claymorphism
+ *   6. Rayons
+ *   7. Typographie (familles + échelle)
+ *   8. Espacement
+ *   9. Mouvement
+ *   10. Mise en page (conteneurs, breakpoints, z-index)
+ */
+
+:root {
+  /* 1. Couleurs primaires (extraites de l'avatar) */
+  --clay-purple-600: #5A5CC8; /* Cube profond */
+  --clay-purple-500: #6D6FD8; /* Periwinkle — couleur héro */
+  --clay-purple-300: #A9A5EC; /* Lavande douce */
+  --clay-purple-100: #DCD9F6; /* Lilas pâle (wireframe) */
+
+  /* 2. Neutres chauds */
+  --clay-cream: #F1EEE9;      /* Fond studio */
+  --clay-white: #FBFAF7;      /* Blanc cassé (polo) */
+  --clay-ink: #2A2A2E;        /* Charbon (pantalon/cheveux) */
+  --clay-ink-soft: #55555E;   /* Texte secondaire */
+  --clay-grey: #9C9CA6;       /* Cube gris / laptop */
+
+  /* 3. Accents */
+  --clay-honey: #E9B94F;      /* Jaune miel (bouton wireframe / focus) */
+  --clay-sand: #E4CE8F;       /* Sable doux (cube beige) */
+  --clay-leaf: #7FA855;       /* Vert plante (succès) */
+  --clay-skin: #C98850;       /* Terracotta chaud — accent rare, illustration uniquement */
+
+  /* 4. États (dérivés de la démo formulaire du design system) */
+  --clay-error: #E28B7B;
+  --clay-error-dark: #B4543F;
+
+  /* Variantes de fond/texte pour les tags (badges de catégorie) */
+  --tag-honey-bg: #F7E9C6;
+  --tag-honey-text: #8A6512;
+  --tag-leaf-bg: #E2EDD2;
+  --tag-leaf-text: #4C6B2C;
+
+  /* 5. Ombres claymorphism (la signature) */
+  --shadow-clay-sm: 0 4px 10px rgba(90, 92, 200, .10), 0 1px 3px rgba(42, 42, 46, .06), inset 0 2px 3px rgba(255, 255, 255, .85), inset 0 -3px 6px rgba(90, 92, 200, .08);
+  --shadow-clay-md: 0 10px 24px rgba(90, 92, 200, .14), 0 3px 8px rgba(42, 42, 46, .07), inset 0 3px 4px rgba(255, 255, 255, .9), inset 0 -5px 10px rgba(90, 92, 200, .10);
+  --shadow-clay-lg: 0 22px 48px rgba(90, 92, 200, .18), 0 6px 14px rgba(42, 42, 46, .08), inset 0 4px 6px rgba(255, 255, 255, .95), inset 0 -7px 14px rgba(90, 92, 200, .12);
+  --shadow-clay-purple: 0 12px 28px rgba(90, 92, 200, .35), inset 0 3px 5px rgba(255, 255, 255, .35), inset 0 -6px 12px rgba(42, 42, 60, .25);
+  --shadow-pill-active: 0 6px 14px rgba(90, 92, 200, .35), inset 0 2px 3px rgba(255, 255, 255, .35);
+  --shadow-float: 0 30px 50px -18px rgba(42, 42, 46, .22);
+
+  /* Champs de formulaire : creusés dans la surface (inset), jamais de bordure */
+  --shadow-field: inset 0 3px 6px rgba(90, 92, 200, .10), inset 0 -1px 2px rgba(255, 255, 255, .9);
+  --shadow-field-error-inset: inset 0 3px 6px rgba(90, 92, 200, .08);
+  --ring-focus: 0 0 0 3px var(--clay-purple-300);
+  --ring-error: 0 0 0 3px var(--clay-error);
+
+  /* 6. Rayons (tout est rond, comme l'avatar) */
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 32px;
+  --radius-xl: 44px;
+  --radius-pill: 999px;
+
+  /* 7. Typographie */
+  --font-display: 'Fredoka', sans-serif;
+  --font-body: 'Nunito Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Échelle typographique (ratio 1.25) */
+  --text-xs: .75rem;
+  --text-sm: .875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+  --text-4xl: 3.052rem;
+  --text-5xl: 3.815rem;
+
+  /* 8. Espacement (base 8px) */
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-5: 40px;
+  --sp-6: 48px;
+  --sp-8: 64px;
+  --sp-10: 80px;
+  --sp-12: 96px;
+
+  /* 9. Mouvement */
+  --ease-clay: cubic-bezier(.34, 1.56, .64, 1); /* rebond doux « squishy » */
+  --dur-fast: .18s;
+  --dur-med: .32s;
+  --dur-slow: .6s;
+
+  /* 10. Mise en page */
+  --container-max: 1200px;
+  --container-padding: var(--sp-3);
+  --header-height: 88px;
+
+  /* Points de rupture de référence (utilisés en JS, cf. navigation.js) */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1200px;
+
+  /* Ordre d'empilement */
+  --z-cubes: 1;
+  --z-content: 10;
+  --z-header: 100;
+  --z-overlay: 200;
+}

@@ -1,0 +1,27 @@
+/**
+ * FICHIER : _community.css
+ * RÔLE    : Liste enrichie de l'engagement communautaire.
+ * DÉPEND  : _tokens.css, _grid.css
+ */
+
+.community__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin-top: var(--sp-5);
+}
+
+.community__item {
+  position: relative;
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--clay-purple-100);
+}
+
+.community__role {
+  margin-bottom: 6px;
+}
+
+.community__text {
+  font-size: var(--text-sm);
+  max-width: 64ch;
+}

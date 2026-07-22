@@ -1,0 +1,107 @@
+/**
+ * FICHIER : _forms.css
+ * RÔLE    : Formulaire de contact — champs "creusés" (ombre inset, jamais
+ *           de bordure), états focus/erreur, message de statut.
+ * DÉPEND  : _tokens.css, _buttons.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Structure du formulaire
+ *   2. Champs
+ *   3. États focus / erreur
+ *   4. Statut de soumission
+ */
+
+/* 1. Structure du formulaire */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.form__label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  margin-bottom: 8px;
+}
+
+.form__optional {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--clay-ink-soft);
+}
+
+/* 2. Champs */
+.form__input,
+.form__select,
+.form__textarea {
+  width: 100%;
+  border: none;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  background: var(--clay-cream);
+  border-radius: var(--radius-sm);
+  padding: 15px 18px;
+  color: var(--clay-ink);
+  box-shadow: var(--shadow-field);
+  transition: box-shadow var(--dur-fast) ease;
+}
+
+.form__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form__hint {
+  min-height: 1.2em;
+  font-size: var(--text-xs);
+  color: var(--clay-ink-soft);
+  margin-top: 6px;
+}
+
+/* 3. États focus / erreur */
+.form__input:focus,
+.form__select:focus,
+.form__textarea:focus {
+  outline: none;
+  box-shadow: var(--shadow-field), var(--ring-focus);
+}
+
+.form__field--error .form__input,
+.form__field--error .form__select,
+.form__field--error .form__textarea {
+  box-shadow: var(--shadow-field-error-inset), var(--ring-error);
+}
+
+.form__field--error .form__hint {
+  color: var(--clay-error-dark);
+  font-weight: 700;
+}
+
+/* 4. Statut de soumission */
+.form__submit {
+  width: 100%;
+}
+
+.form__status {
+  min-height: 1.4em;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.form__status--success {
+  color: var(--clay-leaf);
+}
+
+.form__status--error {
+  color: var(--clay-error-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form__input,
+  .form__select,
+  .form__textarea {
+    transition: none;
+  }
+}

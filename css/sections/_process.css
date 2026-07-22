@@ -1,0 +1,84 @@
+/**
+ * FICHIER : _process.css
+ * RÔLE    : Timeline du processus de travail — verticale sur mobile,
+ *           horizontale à partir de 900px.
+ * DÉPEND  : _tokens.css, _grid.css
+ */
+
+.process__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  margin-top: var(--sp-5);
+  counter-reset: process;
+}
+
+.process__step {
+  position: relative;
+  padding-left: 64px;
+}
+
+.process__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 44px;
+  width: 2px;
+  height: calc(100% + var(--sp-5) - 44px);
+  background: var(--clay-purple-100);
+}
+
+.process__number {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--clay-purple-500);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  box-shadow: var(--shadow-clay-purple);
+}
+
+.process__title {
+  margin-bottom: var(--sp-1);
+}
+
+.process__text {
+  font-size: var(--text-sm);
+  max-width: 42ch;
+}
+
+@media (min-width: 900px) {
+  .process__list {
+    flex-direction: row;
+    gap: var(--sp-3);
+  }
+
+  .process__step {
+    flex: 1;
+    padding-left: 0;
+    padding-top: 64px;
+    text-align: center;
+  }
+
+  .process__step:not(:last-child)::after {
+    left: 50%;
+    top: 19px;
+    width: calc(100% - 40px);
+    height: 2px;
+  }
+
+  .process__number {
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  .process__text {
+    margin-inline: auto;
+  }
+}

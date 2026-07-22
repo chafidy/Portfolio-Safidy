@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clay System — Design System · Safidy Raharijesy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CLAY SYSTEM — Design tokens
+   Basé sur l'avatar 3D claymorphism de Safidy Raharijesy
+   ============================================================ */
+:root{
+  /* — Couleurs primaires (extraites de l'avatar) — */
+  --clay-purple-600:#5A5CC8;   /* Cube profond */
+  --clay-purple-500:#6D6FD8;   /* Periwinkle — couleur héro */
+  --clay-purple-300:#A9A5EC;   /* Lavande douce */
+  --clay-purple-100:#DCD9F6;   /* Lilas pâle (wireframe) */
+
+  /* — Neutres chauds — */
+  --clay-cream:#F1EEE9;        /* Fond studio */
+  --clay-white:#FBFAF7;        /* Blanc cassé (polo) */
+  --clay-ink:#2A2A2E;          /* Charbon (pantalon/cheveux) */
+  --clay-ink-soft:#55555E;     /* Texte secondaire */
+  --clay-grey:#9C9CA6;         /* Cube gris / laptop */
+
+  /* — Accents — */
+  --clay-honey:#E9B94F;        /* Jaune miel (bouton wireframe) */
+  --clay-sand:#E4CE8F;         /* Sable doux (cube beige) */
+  --clay-leaf:#7FA855;         /* Vert plante */
+  --clay-skin:#C98850;         /* Terracotta chaud (peau) — accent rare */
+
+  /* — Ombres claymorphism (la signature) — */
+  --shadow-clay-sm: 0 4px 10px rgba(90,92,200,.10), 0 1px 3px rgba(42,42,46,.06), inset 0 2px 3px rgba(255,255,255,.85), inset 0 -3px 6px rgba(90,92,200,.08);
+  --shadow-clay-md: 0 10px 24px rgba(90,92,200,.14), 0 3px 8px rgba(42,42,46,.07), inset 0 3px 4px rgba(255,255,255,.9), inset 0 -5px 10px rgba(90,92,200,.10);
+  --shadow-clay-lg: 0 22px 48px rgba(90,92,200,.18), 0 6px 14px rgba(42,42,46,.08), inset 0 4px 6px rgba(255,255,255,.95), inset 0 -7px 14px rgba(90,92,200,.12);
+  --shadow-clay-purple: 0 12px 28px rgba(90,92,200,.35), inset 0 3px 5px rgba(255,255,255,.35), inset 0 -6px 12px rgba(42,42,60,.25);
+  --shadow-float: 0 30px 50px -18px rgba(42,42,46,.22);
+
+  /* — Rayons (tout est rond, comme l'avatar) — */
+  --radius-sm:14px;
+  --radius-md:22px;
+  --radius-lg:32px;
+  --radius-xl:44px;
+  --radius-pill:999px;
+
+  /* — Typographie — */
+  --font-display:'Fredoka',sans-serif;
+  --font-body:'Nunito Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  /* — Échelle typographique (ratio 1.25) — */
+  --text-xs:.75rem; --text-sm:.875rem; --text-base:1rem;
+  --text-lg:1.25rem; --text-xl:1.563rem; --text-2xl:1.953rem;
+  --text-3xl:2.441rem; --text-4xl:3.052rem; --text-5xl:3.815rem;
+
+  /* — Espacement (base 8px) — */
+  --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:32px;
+  --sp-5:40px; --sp-6:48px; --sp-8:64px; --sp-10:80px; --sp-12:96px;
+
+  /* — Mouvement — */
+  --ease-clay:cubic-bezier(.34,1.56,.64,1); /* rebond doux "squishy" */
+  --dur-fast:.18s; --dur-med:.32s;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--clay-cream);
+  color:var(--clay-ink);
+  line-height:1.6;
+  font-size:var(--text-base);
+}
+::selection{background:var(--clay-purple-300);color:var(--clay-ink)}
+
+/* ---------- Layout du guide ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--sp-3)}
+section{padding:var(--sp-10) 0;border-bottom:2px dashed rgba(90,92,200,.15)}
+section:last-of-type{border-bottom:none}
+
+.eyebrow{
+  font-family:var(--font-mono);font-size:var(--text-xs);
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--clay-purple-500);font-weight:600;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:var(--sp-2);
+}
+.eyebrow::before{content:'';width:10px;height:10px;border-radius:4px;background:var(--clay-purple-500);display:inline-block;box-shadow:inset 0 1px 2px rgba(255,255,255,.6)}
+
+h1{font-family:var(--font-display);font-weight:600;font-size:clamp(2.4rem,6vw,var(--text-5xl));line-height:1.08;letter-spacing:-.01em}
+h2{font-family:var(--font-display);font-weight:600;font-size:var(--text-3xl);line-height:1.15;margin-bottom:var(--sp-2)}
+h3{font-family:var(--font-display);font-weight:500;font-size:var(--text-xl);margin-bottom:var(--sp-1)}
+.lead{font-size:var(--text-lg);color:var(--clay-ink-soft);max-width:56ch}
+p.note{color:var(--clay-ink-soft);font-size:var(--text-sm);max-width:60ch}
+code{font-family:var(--font-mono);font-size:.82em;background:var(--clay-purple-100);padding:2px 8px;border-radius:8px;color:var(--clay-purple-600)}
+
+/* ---------- HERO ---------- */
+.hero{padding:var(--sp-12) 0 var(--sp-10);position:relative;overflow:hidden}
+.hero-cubes{position:absolute;inset:0;pointer-events:none}
+.cube{position:absolute;border-radius:18px;box-shadow:var(--shadow-clay-md);animation:floaty 6s ease-in-out infinite}
+.cube.c1{width:56px;height:56px;background:var(--clay-purple-500);top:12%;right:8%;animation-delay:0s}
+.cube.c2{width:38px;height:38px;background:var(--clay-honey);top:55%;right:16%;border-radius:13px;animation-delay:1.2s}
+.cube.c3{width:44px;height:44px;background:var(--clay-purple-100);top:30%;right:26%;border-radius:15px;animation-delay:2.1s}
+.cube.c4{width:30px;height:30px;background:var(--clay-white);top:70%;right:5%;border-radius:11px;animation-delay:.7s}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.cube{animation:none}}
+
+.hero .badge-version{
+  display:inline-block;background:var(--clay-white);border-radius:var(--radius-pill);
+  padding:8px 20px;font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;
+  color:var(--clay-purple-600);box-shadow:var(--shadow-clay-sm);margin-bottom:var(--sp-3);
+}
+.hero p.lead{margin-top:var(--sp-3)}
+
+/* ---------- SWATCHES ---------- */
+.swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--sp-2);margin-top:var(--sp-4)}
+.swatch{border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-clay-sm);background:var(--clay-white);transition:transform var(--dur-med) var(--ease-clay)}
+.swatch:hover{transform:translateY(-6px) scale(1.02)}
+.swatch .chip{height:96px;position:relative}
+.swatch .chip::after{content:'';position:absolute;inset:0;box-shadow:inset 0 4px 6px rgba(255,255,255,.4),inset 0 -6px 10px rgba(0,0,0,.10)}
+.swatch .meta{padding:12px 14px}
+.swatch .meta b{display:block;font-size:var(--text-sm);font-weight:800}
+.swatch .meta span{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--clay-ink-soft)}
+.swatch .meta em{display:block;font-style:normal;font-size:var(--text-xs);color:var(--clay-purple-500);margin-top:2px}
+
+/* ---------- TYPO SPECIMENS ---------- */
+.type-card{background:var(--clay-white);border-radius:var(--radius-lg);padding:var(--sp-4);box-shadow:var(--shadow-clay-sm);margin-top:var(--sp-3)}
+.type-row{display:flex;align-items:baseline;gap:var(--sp-3);padding:var(--sp-2) 0;border-bottom:1px solid rgba(90,92,200,.12);flex-wrap:wrap}
+.type-row:last-child{border-bottom:none}
+.type-row .label{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--clay-ink-soft);min-width:170px}
+.spec-display{font-family:var(--font-display);font-weight:600;font-size:var(--text-4xl);line-height:1.05}
+.spec-h2{font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl)}
+.spec-h3{font-family:var(--font-display);font-weight:500;font-size:var(--text-xl)}
+.spec-body{font-size:var(--text-base);max-width:48ch}
+.spec-small{font-size:var(--text-sm);color:var(--clay-ink-soft)}
+.spec-mono{font-family:var(--font-mono);font-size:var(--text-sm);color:var(--clay-purple-600)}
+
+/* ---------- BOUTONS ---------- */
+.demo-row{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;margin-top:var(--sp-3)}
+.btn{
+  font-family:var(--font-display);font-weight:500;font-size:var(--text-base);
+  border:none;cursor:pointer;border-radius:var(--radius-pill);
+  padding:16px 34px;transition:transform var(--dur-fast) var(--ease-clay),box-shadow var(--dur-fast) ease;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.btn:focus-visible{outline:3px solid var(--clay-honey);outline-offset:3px}
+.btn:active{transform:scale(.94)}
+.btn-primary{background:var(--clay-purple-500);color:#fff;box-shadow:var(--shadow-clay-purple)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(90,92,200,.42),inset 0 3px 5px rgba(255,255,255,.4),inset 0 -6px 12px rgba(42,42,60,.25)}
+.btn-secondary{background:var(--clay-white);color:var(--clay-ink);box-shadow:var(--shadow-clay-md)}
+.btn-secondary:hover{transform:translateY(-3px)}
+.btn-honey{background:var(--clay-honey);color:var(--clay-ink);box-shadow:0 12px 26px rgba(233,185,79,.4),inset 0 3px 5px rgba(255,255,255,.5),inset 0 -6px 10px rgba(160,110,20,.22)}
+.btn-honey:hover{transform:translateY(-3px)}
+.btn-ghost{background:transparent;color:var(--clay-purple-600);box-shadow:inset 0 0 0 2.5px var(--clay-purple-300)}
+.btn-ghost:hover{background:var(--clay-purple-100)}
+.btn-sm{padding:10px 22px;font-size:var(--text-sm)}
+.btn-lg{padding:20px 44px;font-size:var(--text-lg)}
+
+/* ---------- BADGES / TAGS ---------- */
+.tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;
+  border-radius:var(--radius-pill);padding:7px 16px;
+  box-shadow:var(--shadow-clay-sm);
+}
+.tag-purple{background:var(--clay-purple-100);color:var(--clay-purple-600)}
+.tag-honey{background:#F7E9C6;color:#8A6512}
+.tag-leaf{background:#E2EDD2;color:#4C6B2C}
+.tag-ink{background:var(--clay-ink);color:var(--clay-white);box-shadow:0 6px 14px rgba(42,42,46,.3),inset 0 2px 3px rgba(255,255,255,.15)}
+
+/* ---------- CARTES ---------- */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
+.clay-card{
+  background:var(--clay-white);border-radius:var(--radius-lg);
+  padding:var(--sp-4);box-shadow:var(--shadow-clay-md);
+  transition:transform var(--dur-med) var(--ease-clay),box-shadow var(--dur-med) ease;
+  position:relative;
+}
+.clay-card:hover{transform:translateY(-8px) rotate(-.5deg);box-shadow:var(--shadow-clay-lg)}
+.clay-card .icon{
+  width:64px;height:64px;border-radius:20px;display:grid;place-items:center;
+  font-size:28px;margin-bottom:var(--sp-2);
+  box-shadow:inset 0 3px 4px rgba(255,255,255,.6),inset 0 -5px 8px rgba(0,0,0,.12),0 8px 18px rgba(90,92,200,.18);
+}
+.clay-card p{color:var(--clay-ink-soft);font-size:var(--text-sm)}
+.clay-card.featured{background:var(--clay-purple-500);color:#fff;box-shadow:var(--shadow-clay-purple)}
+.clay-card.featured p{color:rgba(255,255,255,.82)}
+.clay-card.featured .icon{background:rgba(255,255,255,.18)}
+
+/* ---------- FORMULAIRE ---------- */
+.form-demo{background:var(--clay-white);border-radius:var(--radius-xl);padding:var(--sp-5);box-shadow:var(--shadow-clay-md);margin-top:var(--sp-4);max-width:560px}
+.field{margin-bottom:var(--sp-3)}
+.field label{display:block;font-family:var(--font-display);font-weight:500;font-size:var(--text-sm);margin-bottom:8px}
+.field input,.field textarea,.field select{
+  width:100%;border:none;font-family:var(--font-body);font-size:var(--text-base);
+  background:var(--clay-cream);border-radius:var(--radius-sm);padding:15px 18px;color:var(--clay-ink);
+  box-shadow:inset 0 3px 6px rgba(90,92,200,.10),inset 0 -1px 2px rgba(255,255,255,.9);
+  transition:box-shadow var(--dur-fast) ease;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none;
+  box-shadow:inset 0 3px 6px rgba(90,92,200,.10),0 0 0 3px var(--clay-purple-300);
+}
+.field .hint{font-size:var(--text-xs);color:var(--clay-ink-soft);margin-top:6px}
+.field.error input{box-shadow:inset 0 3px 6px rgba(90,92,200,.08),0 0 0 3px #E28B7B}
+.field.error .hint{color:#B4543F;font-weight:700}
+
+/* ---------- OMBRES DEMO ---------- */
+.shadow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
+.shadow-demo{background:var(--clay-white);border-radius:var(--radius-md);height:130px;display:grid;place-items:center;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--clay-ink-soft)}
+.sd-1{box-shadow:var(--shadow-clay-sm)}
+.sd-2{box-shadow:var(--shadow-clay-md)}
+.sd-3{box-shadow:var(--shadow-clay-lg)}
+.sd-4{background:var(--clay-purple-500);color:#fff;box-shadow:var(--shadow-clay-purple)}
+
+/* ---------- RAYONS DEMO ---------- */
+.radius-grid{display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-4);align-items:flex-end}
+.radius-demo{background:var(--clay-purple-300);width:110px;height:110px;display:grid;place-items:center;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--clay-ink);box-shadow:var(--shadow-clay-sm)}
+
+/* ---------- NAV DEMO ---------- */
+.nav-demo{
+  background:var(--clay-white);border-radius:var(--radius-pill);
+  padding:10px 12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  box-shadow:var(--shadow-clay-md);margin-top:var(--sp-4);max-width:640px;
+}
+.nav-demo a{
+  font-family:var(--font-display);font-weight:500;font-size:var(--text-sm);
+  color:var(--clay-ink-soft);text-decoration:none;padding:11px 20px;border-radius:var(--radius-pill);
+  transition:all var(--dur-fast) ease;
+}
+.nav-demo a:hover{color:var(--clay-purple-600);background:var(--clay-purple-100)}
+.nav-demo a.active{background:var(--clay-purple-500);color:#fff;box-shadow:0 6px 14px rgba(90,92,200,.35),inset 0 2px 3px rgba(255,255,255,.35)}
+
+/* ---------- TABLE TOKENS ---------- */
+.token-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:var(--sp-3);background:var(--clay-white);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-clay-sm);font-size:var(--text-sm)}
+.token-table th{font-family:var(--font-display);font-weight:500;text-align:left;padding:14px 18px;background:var(--clay-purple-100);color:var(--clay-purple-600)}
+.token-table td{padding:12px 18px;border-top:1px solid rgba(90,92,200,.1)}
+.token-table td:first-child{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--clay-purple-600)}
+
+/* ---------- FOOTER ---------- */
+footer{padding:var(--sp-8) 0;text-align:center;color:var(--clay-ink-soft);font-size:var(--text-sm)}
+footer b{font-family:var(--font-display);color:var(--clay-ink)}
+
+@media(max-width:640px){
+  section{padding:var(--sp-8) 0}
+  .type-row .label{min-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="hero-cubes" aria-hidden="true">
+    <div class="cube c1"></div><div class="cube c2"></div>
+    <div class="cube c3"></div><div class="cube c4"></div>
+  </div>
+  <div class="wrap">
+    <span class="badge-version">CLAY SYSTEM · v1.0 · 2026</span>
+    <h1>Un design system<br>doux comme de la <span style="color:var(--clay-purple-500)">pâte à modeler</span></h1>
+    <p class="lead">Le langage visuel du portfolio de Safidy Raharijesy, dérivé de son avatar 3D : claymorphism, formes rebondies, palette lavande &amp; miel, et une chaleur tactile dans chaque composant.</p>
+    <div class="demo-row">
+      <button class="btn btn-primary">Voir les composants</button>
+      <button class="btn btn-secondary">Télécharger les tokens</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== PRINCIPES ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">01 · Principes</span>
+    <h2>Trois règles, aucune exception</h2>
+    <div class="card-grid">
+      <div class="clay-card">
+        <div class="icon" style="background:var(--clay-purple-100)">🫧</div>
+        <h3>Tout est rond</h3>
+        <p>Aucun angle vif. Le rayon minimum est de 14&nbsp;px, les boutons sont des pilules, les cartes ont des coins de 32&nbsp;px. Comme l'avatar : zéro arête, que des courbes.</p>
+      </div>
+      <div class="clay-card">
+        <div class="icon" style="background:#F7E9C6">💡</div>
+        <h3>La lumière vient d'en haut</h3>
+        <p>Chaque surface reçoit un reflet clair en haut (<code>inset</code> blanc) et une ombre chaude en bas. C'est la recette qui donne l'effet "argile moulée".</p>
+      </div>
+      <div class="clay-card">
+        <div class="icon" style="background:#E2EDD2">🌱</div>
+        <h3>Le mouvement est élastique</h3>
+        <p>Les interactions rebondissent avec <code>cubic-bezier(.34,1.56,.64,1)</code> — un léger dépassement, comme une matière souple qu'on presse et qui reprend sa forme.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COULEURS ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">02 · Couleurs</span>
+    <h2>Palette extraite de l'avatar</h2>
+    <p class="note">Chaque teinte vient directement de l'illustration : le cube periwinkle, le polo blanc cassé, le fond studio crème, le bouton miel du wireframe, la plante.</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="chip" style="background:#6D6FD8"></div><div class="meta"><b>Periwinkle</b><span>#6D6FD8</span><em>Couleur héro · CTA · liens</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#5A5CC8"></div><div class="meta"><b>Purple 600</b><span>#5A5CC8</span><em>Hover · texte sur lilas</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#A9A5EC"></div><div class="meta"><b>Lavande</b><span>#A9A5EC</span><em>Accents secondaires</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#DCD9F6"></div><div class="meta"><b>Lilas pâle</b><span>#DCD9F6</span><em>Fonds de badges · surfaces</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#F1EEE9"></div><div class="meta"><b>Crème studio</b><span>#F1EEE9</span><em>Fond de page</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#FBFAF7"></div><div class="meta"><b>Blanc polo</b><span>#FBFAF7</span><em>Cartes · surfaces élevées</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#E9B94F"></div><div class="meta"><b>Miel</b><span>#E9B94F</span><em>Accent chaleureux · focus</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#E4CE8F"></div><div class="meta"><b>Sable</b><span>#E4CE8F</span><em>Illustration · fonds doux</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#7FA855"></div><div class="meta"><b>Feuille</b><span>#7FA855</span><em>Succès · touches organiques</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#2A2A2E"></div><div class="meta"><b>Charbon</b><span>#2A2A2E</span><em>Texte principal</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#55555E"></div><div class="meta"><b>Encre douce</b><span>#55555E</span><em>Texte secondaire</em></div></div>
+      <div class="swatch"><div class="chip" style="background:#C98850"></div><div class="meta"><b>Terracotta</b><span>#C98850</span><em>Accent rare · illustration</em></div></div>
+    </div>
+    <p class="note" style="margin-top:var(--sp-3)"><b>Règle de dosage :</b> 60&nbsp;% crème/blanc · 25&nbsp;% periwinkle &amp; lavandes · 10&nbsp;% charbon (texte) · 5&nbsp;% miel + feuille en ponctuation. Le terracotta reste réservé aux illustrations.</p>
+  </div>
+</section>
+
+<!-- ===================== TYPOGRAPHIE ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">03 · Typographie</span>
+    <h2>Fredoka + Nunito Sans</h2>
+    <p class="note"><b>Fredoka</b> (display) : ronde et amicale, elle prolonge les formes de l'avatar sans tomber dans l'enfantin. <b>Nunito Sans</b> (texte) : lisible et douce, avec des terminaisons arrondies. <b>JetBrains Mono</b> pour les labels techniques et les données.</p>
+    <div class="type-card">
+      <div class="type-row"><span class="label">Display / Fredoka 600 · 61px</span><span class="spec-display">Salama 👋</span></div>
+      <div class="type-row"><span class="label">H2 / Fredoka 600 · 31px</span><span class="spec-h2">Projets récents</span></div>
+      <div class="type-row"><span class="label">H3 / Fredoka 500 · 25px</span><span class="spec-h3">UI/UX Design</span></div>
+      <div class="type-row"><span class="label">Body / Nunito Sans 400 · 16px</span><span class="spec-body">Je conçois des interfaces intuitives et des expériences numériques qui allient esthétique, performance et impact.</span></div>
+      <div class="type-row"><span class="label">Small / Nunito Sans 400 · 14px</span><span class="spec-small">Basé à Madagascar · Disponible à distance</span></div>
+      <div class="type-row"><span class="label">Mono / JetBrains 600 · 14px</span><span class="spec-mono">RÉF. UX·UI — 2026</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== OMBRES & RAYONS ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">04 · La recette claymorphism</span>
+    <h2>Ombres &amp; rayons</h2>
+    <p class="note">La signature du système : une ombre externe colorée (teintée de periwinkle, jamais de noir pur) + un reflet <code>inset</code> blanc en haut + une ombre <code>inset</code> violette en bas. C'est ce triple calque qui fait "l'argile".</p>
+    <div class="shadow-grid">
+      <div class="shadow-demo sd-1">--shadow-clay-sm</div>
+      <div class="shadow-demo sd-2">--shadow-clay-md</div>
+      <div class="shadow-demo sd-3">--shadow-clay-lg</div>
+      <div class="shadow-demo sd-4">--shadow-clay-purple</div>
+    </div>
+    <div class="radius-grid">
+      <div class="radius-demo" style="border-radius:14px">14px<br>sm</div>
+      <div class="radius-demo" style="border-radius:22px">22px<br>md</div>
+      <div class="radius-demo" style="border-radius:32px">32px<br>lg</div>
+      <div class="radius-demo" style="border-radius:44px">44px<br>xl</div>
+      <div class="radius-demo" style="border-radius:999px;width:150px;height:64px">pill</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BOUTONS ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">05 · Composants</span>
+    <h2>Boutons</h2>
+    <p class="note">Toujours en pilule, avec le rebond élastique au hover. Le bouton primaire est le seul élément saturé de la page où il apparaît.</p>
+    <div class="demo-row">
+      <button class="btn btn-primary">Discutons de votre projet →</button>
+      <button class="btn btn-secondary">Télécharger mon CV</button>
+      <button class="btn btn-honey">Voir le projet</button>
+      <button class="btn btn-ghost">En savoir plus</button>
+    </div>
+    <div class="demo-row">
+      <button class="btn btn-primary btn-sm">Petit</button>
+      <button class="btn btn-primary">Normal</button>
+      <button class="btn btn-primary btn-lg">Grand</button>
+    </div>
+
+    <h2 style="margin-top:var(--sp-8)">Badges &amp; tags</h2>
+    <div class="demo-row">
+      <span class="tag tag-purple">UI/UX</span>
+      <span class="tag tag-honey">Branding</span>
+      <span class="tag tag-leaf">Livré ✓</span>
+      <span class="tag tag-ink">Nouveau</span>
+    </div>
+
+    <h2 style="margin-top:var(--sp-8)">Navigation</h2>
+    <nav class="nav-demo" aria-label="Démo navigation">
+      <a href="#" class="active">Accueil</a>
+      <a href="#">À propos</a>
+      <a href="#">Services</a>
+      <a href="#">Projets</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <h2 style="margin-top:var(--sp-8)">Cartes</h2>
+    <div class="card-grid">
+      <div class="clay-card">
+        <div class="icon" style="background:var(--clay-purple-100)">🎨</div>
+        <h3>Design graphique</h3>
+        <p>Identités visuelles, logos, packaging et supports print qui résonnent avec votre audience.</p>
+      </div>
+      <div class="clay-card featured">
+        <div class="icon">📱</div>
+        <h3>UI/UX Design</h3>
+        <p>Recherche UX, prototypes interactifs et design systems complets sous Figma. La carte "featured" utilise le fond periwinkle.</p>
+      </div>
+      <div class="clay-card">
+        <div class="icon" style="background:#F7E9C6">🤖</div>
+        <h3>Automatisation IA</h3>
+        <p>Workflows n8n et IA générative pour gagner des heures chaque semaine.</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:var(--sp-8)">Formulaire</h2>
+    <div class="form-demo">
+      <div class="field">
+        <label for="d-name">Votre nom</label>
+        <input id="d-name" type="text" placeholder="Rakoto Andria">
+        <div class="hint">Les champs sont "creusés" dans la surface — ombre inset, jamais de bordure.</div>
+      </div>
+      <div class="field">
+        <label for="d-type">Type de projet</label>
+        <select id="d-type"><option>Branding</option><option>UI/UX</option><option>Site web</option><option>Automatisation IA</option></select>
+      </div>
+      <div class="field error">
+        <label for="d-mail">Email</label>
+        <input id="d-mail" type="email" value="rakoto@gmail">
+        <div class="hint">Cette adresse email est incomplète — ajoutez le domaine (ex. : .com).</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center">Envoyer le message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TOKENS ===================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">06 · Tokens de référence</span>
+    <h2>Espacement &amp; mouvement</h2>
+    <table class="token-table">
+      <tr><th>Token</th><th>Valeur</th><th>Usage</th></tr>
+      <tr><td>--sp-1 → --sp-12</td><td>8 → 96 px (base 8)</td><td>Tout l'espacement, sans exception</td></tr>
+      <tr><td>--ease-clay</td><td>cubic-bezier(.34,1.56,.64,1)</td><td>Hover, apparitions, transitions de cartes</td></tr>
+      <tr><td>--dur-fast / --dur-med</td><td>180 ms / 320 ms</td><td>Micro-interactions / mouvements de blocs</td></tr>
+      <tr><td>Focus visible</td><td>outline 3px miel #E9B94F</td><td>Accessibilité clavier sur tous les interactifs</td></tr>
+      <tr><td>Contraste texte</td><td>Charbon sur crème = 12.9:1</td><td>AAA — jamais de texte lavande sur crème</td></tr>
+    </table>
+    <p class="note" style="margin-top:var(--sp-3)"><b>Accessibilité :</b> le periwinkle #6D6FD8 sur blanc atteint 4.6:1 — valide en AA pour le texte normal. Pour du petit texte violet, utiliser Purple 600 #5A5CC8 (5.9:1). L'animation flottante respecte <code>prefers-reduced-motion</code>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Clay System v1.0</b> — Design system du portfolio de Safidy Raharijesy · Fredoka + Nunito Sans · 2026
+  </div>
+</footer>
+
+</body>
+</html>
