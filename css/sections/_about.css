@@ -11,7 +11,12 @@
  *   4. Visuel
  */
 
-/* 1. Grille générale */
+/* 1. Grille générale
+   Mobile : empilement dans l'ordre naturel du DOM (texte, visuel, extra).
+   Desktop : zones nommées — le visuel occupe la même ligne que le bloc
+   titre + description ("header"), pour que sa hauteur s'y cale exactement
+   via align-self: stretch. Les piliers/stats passent en pleine largeur
+   sur la ligne suivante. */
 .about__inner {
   display: grid;
   gap: var(--sp-6);
@@ -20,12 +25,24 @@
 @media (min-width: 900px) {
   .about__inner {
     grid-template-columns: .85fr 1.15fr;
-    align-items: center;
+    grid-template-areas:
+      "visual header"
+      "extra   extra";
+    align-items: start;
     gap: var(--sp-8);
   }
 
+  .about__header {
+    grid-area: header;
+  }
+
   .about__visual {
-    order: -1;
+    grid-area: visual;
+    align-self: stretch;
+  }
+
+  .about__extra {
+    grid-area: extra;
   }
 }
 
@@ -95,14 +112,38 @@
   color: var(--clay-ink-soft);
 }
 
-/* 4. Visuel */
+/* 4. Visuel
+   Sur mobile, taille fixe raisonnable. Sur desktop, l'image est mise en
+   position absolue dans son conteneur : elle ne contribue alors plus à
+   la hauteur intrinsèque de la ligne de grille (cf. section 1), qui est
+   donc dictée uniquement par le bloc titre + description. Le conteneur
+   est ensuite étiré (align-self: stretch) à cette hauteur, et l'image
+   la remplit via object-fit: contain, sans jamais être recadrée ni
+   déformée. */
 .about__visual {
   justify-self: center;
+  max-width: 320px;
 }
 
 .about__avatar {
+  display: block;
   width: 100%;
-  max-width: 320px;
   height: auto;
   filter: drop-shadow(var(--shadow-float));
+}
+
+@media (min-width: 900px) {
+  .about__visual {
+    position: relative;
+    max-width: none;
+    width: 100%;
+  }
+
+  .about__avatar {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
