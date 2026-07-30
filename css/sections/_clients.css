@@ -1,0 +1,95 @@
+/**
+ * FICHIER : _clients.css
+ * RÔLE    : Bandeau de logos clients défilant de droite à gauche, infini.
+ *           Logos en noir & blanc par défaut, couleur au survol.
+ *           Fond identique au hero (--clay-cream).
+ */
+
+.clients {
+  padding: var(--sp-8) 0;
+  background: var(--clay-cream); /* Même fond que le hero */
+  overflow: hidden;
+}
+
+/* Wrapper masquant le débordement avec fondu sur les bords */
+.clients__inner {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+/* Track : 2 séries pour boucle seamless */
+.clients__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-logos 35s linear infinite;
+}
+
+/* Pause au hover sur tout le track */
+.clients__track:hover {
+  animation-play-state: paused;
+}
+
+/* Un groupe de logos */
+.clients__logos {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  padding: 0 5rem;
+  flex-shrink: 0;
+}
+
+/* Logo individuel — agrandi */
+.clients__logo {
+  height: 100px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+
+  /* Noir & blanc par défaut */
+  filter: grayscale(100%) brightness(0.35);
+  opacity: 0.65;
+
+  transition:
+    filter 0.35s ease,
+    opacity 0.35s ease,
+    transform 0.25s ease;
+  cursor: default;
+}
+
+/* Couleur originale au survol */
+.clients__logo:hover {
+  filter: grayscale(0%) brightness(1);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Animation droite → gauche */
+@keyframes marquee-logos {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Respect de la préférence de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .clients__track {
+    animation: none;
+  }
+  .clients__logos {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

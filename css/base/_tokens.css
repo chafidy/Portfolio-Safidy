@@ -50,12 +50,12 @@
   --tag-leaf-text: #4C6B2C;
 
   /* 5. Ombres claymorphism (la signature) */
-  --shadow-clay-sm: 0 4px 10px rgba(90, 92, 200, .10), 0 1px 3px rgba(42, 42, 46, .06), inset 0 2px 3px rgba(255, 255, 255, .85), inset 0 -3px 6px rgba(90, 92, 200, .08);
-  --shadow-clay-md: 0 10px 24px rgba(90, 92, 200, .14), 0 3px 8px rgba(42, 42, 46, .07), inset 0 3px 4px rgba(255, 255, 255, .9), inset 0 -5px 10px rgba(90, 92, 200, .10);
-  --shadow-clay-lg: 0 22px 48px rgba(90, 92, 200, .18), 0 6px 14px rgba(42, 42, 46, .08), inset 0 4px 6px rgba(255, 255, 255, .95), inset 0 -7px 14px rgba(90, 92, 200, .12);
-  --shadow-clay-purple: 0 12px 28px rgba(90, 92, 200, .35), inset 0 3px 5px rgba(255, 255, 255, .35), inset 0 -6px 12px rgba(42, 42, 60, .25);
-  --shadow-pill-active: 0 6px 14px rgba(90, 92, 200, .35), inset 0 2px 3px rgba(255, 255, 255, .35);
-  --shadow-float: 0 30px 50px -18px rgba(42, 42, 46, .22);
+  --shadow-clay-sm: 0 4px 10px rgba(90, 92, 200, .05), 0 1px 3px rgba(42, 42, 46, .03), inset 0 2px 3px rgba(255, 255, 255, .80), inset 0 -3px 6px rgba(90, 92, 200, .04);
+  --shadow-clay-md: 0 10px 24px rgba(90, 92, 200, .07), 0 3px 8px rgba(42, 42, 46, .04), inset 0 3px 4px rgba(255, 255, 255, .85), inset 0 -5px 10px rgba(90, 92, 200, .05);
+  --shadow-clay-lg: 0 22px 48px rgba(90, 92, 200, .09), 0 6px 14px rgba(42, 42, 46, .04), inset 0 4px 6px rgba(255, 255, 255, .90), inset 0 -7px 14px rgba(90, 92, 200, .06);
+  --shadow-clay-purple: 0 12px 28px rgba(90, 92, 200, .18), inset 0 3px 5px rgba(255, 255, 255, .25), inset 0 -6px 12px rgba(42, 42, 60, .14);
+  --shadow-pill-active: 0 6px 14px rgba(90, 92, 200, .18), inset 0 2px 3px rgba(255, 255, 255, .25);
+  --shadow-float: 0 30px 50px -18px rgba(42, 42, 46, .11);
 
   /* Champs de formulaire : creusés dans la surface (inset), jamais de bordure */
   --shadow-field: inset 0 3px 6px rgba(90, 92, 200, .10), inset 0 -1px 2px rgba(255, 255, 255, .9);
