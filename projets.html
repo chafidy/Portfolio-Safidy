@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toutes mes réalisations — Safidy Raharijesy | UI/UX Designer &amp; Software Engineer</title>
+  <meta name="description"
+    content="Portfolio complet de Safidy Raharijesy&nbsp;: branding, UI/UX, sites web, packaging et design graphique réalisés pour des marques et associations à Madagascar.">
+  <meta name="author" content="Safidy Raharijesy">
+
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
+
+  <div class="header-sentinel" id="header-sentinel" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="site-header">
+    <div class="container header__inner">
+      <a class="header__logo" href="index.html">Safidy R.</a>
+
+      <button class="header__burger" id="header-burger" type="button" aria-expanded="false"
+        aria-controls="primary-navigation" aria-label="Ouvrir le menu de navigation">
+        <span class="header__burger-line"></span>
+        <span class="header__burger-line"></span>
+        <span class="header__burger-line"></span>
+      </button>
+
+      <nav class="header__nav" id="primary-navigation" aria-label="Navigation principale">
+        <ul class="header__nav-list">
+          <li><a class="header__nav-link" href="index.html#hero">Accueil</a></li>
+          <li><a class="header__nav-link" href="index.html#about">À propos</a></li>
+          <li><a class="header__nav-link" href="index.html#services">Services</a></li>
+          <li><a class="header__nav-link" href="projets.html" aria-current="page">Projets</a></li>
+          <li><a class="header__nav-link" href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ============ PROJETS (galerie complète) ============ -->
+    <section class="projects" id="projects" aria-labelledby="projects-title">
+      <div class="container">
+        <span class="eyebrow">Réalisations</span>
+        <h1 id="projects-title">Toutes mes réalisations</h1>
+        <p class="lead">
+          L'ensemble de mes projets de branding, UI/UX, développement web et packaging&nbsp;:
+          filtrez par catégorie ou cliquez sur une réalisation pour en voir le détail.
+        </p>
+
+        <div class="filter-list" role="group" aria-label="Filtrer les projets par catégorie">
+          <button class="filter-pill filter-pill--active" type="button" data-filter="all"
+            aria-pressed="true">Tous</button>
+          <button class="filter-pill" type="button" data-filter="branding" aria-pressed="false">Branding</button>
+          <button class="filter-pill" type="button" data-filter="ui-ux" aria-pressed="false">UI/UX</button>
+          <button class="filter-pill" type="button" data-filter="web" aria-pressed="false">Web</button>
+          <button class="filter-pill" type="button" data-filter="packaging" aria-pressed="false">Packaging</button>
+        </div>
+
+        <p class="projects__status" aria-live="polite"></p>
+
+        <ul class="project-grid" id="project-grid">
+          <li class="project-card" data-category="branding">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p1.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p1.png"
+                  alt="Signalétique murale ronde de l'IT Community Antsirabe" width="370" height="325" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">IT Community Antsirabe</h3>
+                <p class="project-card__text">
+                  Logo et identité visuelle complète pour la communauté tech d'Antsirabe. Un
+                  système visuel décliné sur les réseaux sociaux et les événements.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--purple">Branding</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="illustration">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p2.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p2.png"
+                  alt="T-shirt noir illustré pour la mention informatique de l'ASJA" width="370" height="325"
+                  loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">T-shirt ASJA — Mention Informatique</h3>
+                <p class="project-card__text">
+                  Design textile et illustration pour la promotion de la mention informatique de
+                  l'Université ASJA.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--honey">Illustration</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="packaging">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p3.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p3.png"
+                  alt="Bouteille et verre de vin Maracuja avec étiquette" width="370" height="325" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Maracuja Wine</h3>
+                <p class="project-card__text">
+                  Logo, étiquette et packaging pour un vin artisanal de maracuja. Direction
+                  artistique évoquant le terroir malgache.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--leaf">Packaging</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="ui-ux web">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p4.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p4.png"
+                  alt="Capture de la landing page de l'Université ASJA" width="370" height="325" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Landing Page ASJA</h3>
+                <p class="project-card__text">
+                  Conception et développement de la landing page institutionnelle&nbsp;:
+                  architecture de l'information, maquettes et intégration responsive.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--purple">UI/UX</li>
+                  <li class="tag tag--ink">Web</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="ui-ux web">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p5.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p5.png"
+                  alt="Maquette de l'application web Otrin sur ordinateur et mobile" width="370" height="325"
+                  loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Otrin Web App</h3>
+                <p class="project-card__text">
+                  Design d'interface et développement d'une application web. Parcours utilisateur
+                  optimisé et design system réutilisable.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--purple">UI/UX</li>
+                  <li class="tag tag--ink">Web</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="web">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p6.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p6.png"
+                  alt="Capture de la plateforme de commande Cookeo sur ordinateur et mobile" width="370" height="325"
+                  loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Cookeo — Food Ordering</h3>
+                <p class="project-card__text">
+                  Plateforme de commande de repas en ligne&nbsp;: expérience de commande fluide du
+                  menu au panier.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--ink">Web</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="design-graphique">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p7.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p7.png"
+                  alt="Affiche du DevFest Antsirabe installée sur un abribus" width="370" height="325" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">DevFest 2023</h3>
+                <p class="project-card__text">
+                  Affiche officielle du DevFest Antsirabe, dans le respect des guidelines Google
+                  Developers.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--honey">Design graphique</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="packaging">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p8.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p8.png"
+                  alt="Flacon de parfum Fiah Cosmétique avec étiquette illustrée" width="370" height="325"
+                  loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Fiah Cosmétique</h3>
+                <p class="project-card__text">
+                  Logo, étiquetage et packaging pour une marque de cosmétiques locale.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--leaf">Packaging</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="packaging">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p9.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p9.png"
+                  alt="Canette de bière artisanale Betsa tenue à la main" width="370" height="325" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Betsa Beer</h3>
+                <p class="project-card__text">
+                  Identité et habillage de bouteille pour une bière artisanale malgache.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--leaf">Packaging</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="design-graphique">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p10.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p10.png"
+                  alt="Roll-up CodeCraft présentant une plateforme de cours IT en ligne" width="1080" height="1080"
+                  loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">CodeCraft — Roll-up</h3>
+                <p class="project-card__text">
+                  Support événementiel grand format pour CodeCraft&nbsp;: hiérarchie visuelle
+                  pensée pour la lisibilité à distance.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--honey">Design graphique</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="branding">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p11.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p11.png"
+                  alt="Cartes de visite LEAFY, recto vert et verso crème, posées sur une branche de romarin"
+                  width="1080" height="1080" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Cartes de visite — LEAFY &amp; Innova</h3>
+                <p class="project-card__text">
+                  Papeterie d'entreprise premium pour une société et une startup&nbsp;: finitions,
+                  typographie et cohérence de marque.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--purple">Branding</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+
+          <li class="project-card" data-category="mobile">
+            <article>
+              <a class="project-card__thumb-trigger" href="assets/project/p12.png" target="_blank" rel="noopener">
+                <span class="sr-only">Agrandir —</span>
+                <img class="project-card__thumb" src="assets/project/p12.png"
+                  alt="Écrans du jeu mobile Fanorontelo sur smartphones" width="1024" height="1024" loading="lazy">
+              </a>
+              <div class="project-card__body">
+                <h3 class="project-card__title">Fanorontelo</h3>
+                <p class="project-card__text">
+                  Jeu Android traditionnel malgache développé en Kotlin/Jetpack Compose, avec une
+                  IA minimax et un fonctionnement 100&nbsp;% hors ligne.
+                </p>
+                <ul class="tag-list">
+                  <li class="tag tag--ink">Mobile</li>
+                </ul>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ CTA CONTACT ============ -->
+    <section class="projects-cta" aria-labelledby="projects-cta-title">
+      <div class="container projects-cta__inner">
+        <span class="eyebrow">Un projet en tête&nbsp;?</span>
+        <h2 id="projects-cta-title">Discutons de votre projet</h2>
+        <p class="lead">
+          Un besoin en branding, UI/UX, développement web ou automatisation&nbsp;? Écrivez-moi —
+          je réponds sous 24&nbsp;h.
+        </p>
+        <a class="btn btn--primary projects-cta__action" href="index.html#contact">Discutons de votre projet →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <p class="site-footer__baseline">Safidy Raharijesy — UI/UX Designer &amp; Software Engineer</p>
+        <p class="site-footer__mention text-small">Creative Designer chez SFD Consulting · © 2026 Tous droits réservés
+        </p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Liens rapides">
+        <ul>
+          <li><a href="index.html#hero">Accueil</a></li>
+          <li><a href="index.html#about">À propos</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="projets.html">Projets</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <ul class="site-footer__social">
+        <li><a href="https://linkedin.com/in/safidy-raharijesy" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </li>
+        <li><a href="https://behance.net/safidyraharijesy" target="_blank" rel="noopener noreferrer">Behance</a></li>
+        <li><a href="https://github.com/chafidy" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ============ LIGHTBOX (aperçu détaillé d'un projet, en modal) ============ -->
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title">
+    <button class="lightbox__close" type="button" aria-label="Fermer l'aperçu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        focusable="false" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" />
+        <line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+    <div class="lightbox__inner">
+      <div class="lightbox__media">
+        <img class="lightbox__image" id="lightbox-image" src="" alt="">
+      </div>
+      <div class="lightbox__content">
+        <h3 class="lightbox__title" id="lightbox-title"></h3>
+        <p class="lightbox__text" id="lightbox-text"></p>
+        <ul class="tag-list" id="lightbox-tags"></ul>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

@@ -18,6 +18,27 @@
   margin-top: var(--sp-4);
 }
 
+.projects__more {
+  margin-top: var(--sp-6);
+  text-align: center;
+}
+
+/* CTA de fin de page sur la galerie complète (projets.html) */
+.projects-cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.projects-cta__inner .lead {
+  margin-top: var(--sp-1);
+}
+
+.projects-cta__action {
+  margin-top: var(--sp-4);
+}
+
 @media (min-width: 640px) {
   .project-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -82,31 +103,54 @@
   transform: scale(1.05);
 }
 
-/* Voile + libellé révélant l'affordance "cliquable" au survol/focus.
-   Texte plutôt qu'une icône emoji : rendu fiable quelle que soit la
-   police du navigateur. z-index garantit qu'il reste au-dessus de
-   l'image, qui crée son propre contexte d'empilement une fois zoomée
-   (transform:scale au survol). */
-.project-card__thumb-trigger::after {
-  content: 'Agrandir';
+/* Voile léger + badge rond "+" révélant l'affordance "cliquable" au
+   survol/focus. z-index garantit qu'il reste au-dessus de l'image, qui
+   crée son propre contexte d'empilement une fois zoomée (transform:scale
+   au survol). Le badge grossit légèrement à l'apparition (écho du sens
+   de "agrandir"). */
+.project-card__thumb-trigger::before {
+  content: '';
   position: absolute;
   z-index: 1;
   inset: 0;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: var(--text-sm);
-  letter-spacing: .04em;
-  background: rgba(42, 42, 46, .45);
+  background: rgba(42, 42, 46, .35);
   opacity: 0;
   transition: opacity var(--dur-fast) ease;
 }
 
+.project-card__thumb-trigger::after {
+  content: '+';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  margin: auto;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1;
+  border-radius: var(--radius-pill);
+  background: var(--clay-purple-500);
+  box-shadow: var(--shadow-clay-md);
+  opacity: 0;
+  transform: scale(.6);
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) var(--ease-clay);
+}
+
+.project-card__thumb-trigger:hover::before,
+.project-card__thumb-trigger:focus-visible::before,
 .project-card__thumb-trigger:hover::after,
 .project-card__thumb-trigger:focus-visible::after {
   opacity: 1;
+}
+
+.project-card__thumb-trigger:hover::after,
+.project-card__thumb-trigger:focus-visible::after {
+  transform: scale(1);
 }
 
 .project-card__body {
@@ -126,7 +170,10 @@
   .project-card > article:hover,
   .project-card__thumb,
   .project-card__thumb-trigger:hover .project-card__thumb,
-  .project-card__thumb-trigger:focus-visible .project-card__thumb {
+  .project-card__thumb-trigger:focus-visible .project-card__thumb,
+  .project-card__thumb-trigger::after,
+  .project-card__thumb-trigger:hover::after,
+  .project-card__thumb-trigger:focus-visible::after {
     transition: none;
     transform: none;
   }

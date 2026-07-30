@@ -514,128 +514,11 @@
               </div>
             </article>
           </li>
-
-          <li class="project-card" data-category="design-graphique">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p7.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p7.png"
-                  alt="Affiche du DevFest Antsirabe installée sur un abribus" width="370" height="325" loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">DevFest 2023</h3>
-                <p class="project-card__text">
-                  Affiche officielle du DevFest Antsirabe, dans le respect des guidelines Google
-                  Developers.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--honey">Design graphique</li>
-                </ul>
-              </div>
-            </article>
-          </li>
-
-          <li class="project-card" data-category="packaging">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p8.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p8.png"
-                  alt="Flacon de parfum Fiah Cosmétique avec étiquette illustrée" width="370" height="325"
-                  loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">Fiah Cosmétique</h3>
-                <p class="project-card__text">
-                  Logo, étiquetage et packaging pour une marque de cosmétiques locale.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--leaf">Packaging</li>
-                </ul>
-              </div>
-            </article>
-          </li>
-
-          <li class="project-card" data-category="packaging">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p9.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p9.png"
-                  alt="Canette de bière artisanale Betsa tenue à la main" width="370" height="325" loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">Betsa Beer</h3>
-                <p class="project-card__text">
-                  Identité et habillage de bouteille pour une bière artisanale malgache.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--leaf">Packaging</li>
-                </ul>
-              </div>
-            </article>
-          </li>
-
-          <li class="project-card" data-category="design-graphique">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p10.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p10.png"
-                  alt="Roll-up CodeCraft présentant une plateforme de cours IT en ligne" width="1080" height="1080"
-                  loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">CodeCraft — Roll-up</h3>
-                <p class="project-card__text">
-                  Support événementiel grand format pour CodeCraft&nbsp;: hiérarchie visuelle
-                  pensée pour la lisibilité à distance.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--honey">Design graphique</li>
-                </ul>
-              </div>
-            </article>
-          </li>
-
-          <li class="project-card" data-category="branding">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p11.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p11.png"
-                  alt="Cartes de visite LEAFY, recto vert et verso crème, posées sur une branche de romarin"
-                  width="1080" height="1080" loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">Cartes de visite — LEAFY &amp; Innova</h3>
-                <p class="project-card__text">
-                  Papeterie d'entreprise premium pour une société et une startup&nbsp;: finitions,
-                  typographie et cohérence de marque.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--purple">Branding</li>
-                </ul>
-              </div>
-            </article>
-          </li>
-
-          <li class="project-card" data-category="mobile">
-            <article>
-              <a class="project-card__thumb-trigger" href="assets/project/p12.png" target="_blank" rel="noopener">
-                <span class="sr-only">Agrandir —</span>
-                <img class="project-card__thumb" src="assets/project/p12.png"
-                  alt="Écrans du jeu mobile Fanorontelo sur smartphones" width="1024" height="1024" loading="lazy">
-              </a>
-              <div class="project-card__body">
-                <h3 class="project-card__title">Fanorontelo</h3>
-                <p class="project-card__text">
-                  Jeu Android traditionnel malgache développé en Kotlin/Jetpack Compose, avec une
-                  IA minimax et un fonctionnement 100&nbsp;% hors ligne.
-                </p>
-                <ul class="tag-list">
-                  <li class="tag tag--ink">Mobile</li>
-                </ul>
-              </div>
-            </article>
-          </li>
         </ul>
+
+        <div class="projects__more">
+          <a class="btn btn--secondary" href="projets.html">Voir plus de réalisations →</a>
+        </div>
       </div>
     </section>
 
@@ -856,8 +739,8 @@
     </div>
   </footer>
 
-  <!-- ============ LIGHTBOX (aperçu plein écran des photos de projet) ============ -->
-  <dialog class="lightbox" id="lightbox" aria-label="Aperçu de l'image du projet">
+  <!-- ============ LIGHTBOX (aperçu détaillé d'un projet, en modal) ============ -->
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title">
     <button class="lightbox__close" type="button" aria-label="Fermer l'aperçu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         focusable="false" aria-hidden="true">
@@ -865,7 +748,16 @@
         <line x1="18" y1="6" x2="6" y2="18" />
       </svg>
     </button>
-    <img class="lightbox__image" id="lightbox-image" src="" alt="">
+    <div class="lightbox__inner">
+      <div class="lightbox__media">
+        <img class="lightbox__image" id="lightbox-image" src="" alt="">
+      </div>
+      <div class="lightbox__content">
+        <h3 class="lightbox__title" id="lightbox-title"></h3>
+        <p class="lightbox__text" id="lightbox-text"></p>
+        <ul class="tag-list" id="lightbox-tags"></ul>
+      </div>
+    </div>
   </dialog>
 
   <script type="module" src="js/main.js"></script>
