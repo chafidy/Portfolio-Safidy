@@ -1,9 +1,29 @@
 /**
  * FICHIER : _community.css
- * RÔLE    : Liste enrichie de l'engagement communautaire.
+ * RÔLE    : Liste enrichie de l'engagement communautaire + visuel avatar.
  * DÉPEND  : _tokens.css, _grid.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Grille générale
+ *   2. Liste d'engagements
+ *   3. Visuel
  */
 
+/* 1. Grille générale */
+.community__inner {
+  display: grid;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 900px) {
+  .community__inner {
+    grid-template-columns: 1.15fr .85fr;
+    align-items: start;
+    gap: var(--sp-8);
+  }
+}
+
+/* 2. Liste d'engagements */
 .community__list {
   display: flex;
   flex-direction: column;
@@ -24,4 +44,43 @@
 .community__text {
   font-size: var(--text-sm);
   max-width: 64ch;
+}
+
+/* 3. Visuel
+   Même technique que .about__visual : sur desktop, l'image passe en
+   position absolue et ne contribue donc plus à la hauteur intrinsèque
+   de la ligne de grille, qui est alors dictée uniquement par
+   .community__content. Le conteneur est ensuite étiré (align-self:
+   stretch) à cette hauteur, et l'image la remplit via object-fit:
+   contain, sans recadrage ni déformation. Un léger transform: scale()
+   l'agrandit encore un peu au-delà de cette hauteur — sans affecter la
+   grille, puisqu'un transform ne modifie pas la boîte de mise en page. */
+.community__visual {
+  justify-self: center;
+  max-width: 260px;
+}
+
+.community__avatar {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(var(--shadow-float));
+}
+
+@media (min-width: 900px) {
+  .community__visual {
+    position: relative;
+    max-width: none;
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .community__avatar {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scale(1.18);
+  }
 }

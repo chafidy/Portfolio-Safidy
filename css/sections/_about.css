@@ -2,7 +2,7 @@
  * FICHIER : _about.css
  * RÔLE    : Section À propos — texte, piliers, chiffres clés animés et
  *           visuel avatar.
- * DÉPEND  : _tokens.css, _grid.css
+ * DÉPEND  : _tokens.css, _grid.css, _cubes.css
  *
  * TABLE DES MATIÈRES
  *   1. Grille générale
@@ -119,13 +119,34 @@
    donc dictée uniquement par le bloc titre + description. Le conteneur
    est ensuite étiré (align-self: stretch) à cette hauteur, et l'image
    la remplit via object-fit: contain, sans jamais être recadrée ni
-   déformée. */
+   déformée.
+   Les cubes (.cube, voir components/_cubes.css) sont positionnés en
+   arrière-plan via des z-index explicites plutôt qu'en s'appuyant sur
+   l'ordre du DOM, car l'avatar change de mode de positionnement entre
+   mobile et desktop (cf. ci-dessus). */
 .about__visual {
+  position: relative;
   justify-self: center;
   max-width: 320px;
 }
 
+.about__cubes {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-cubes);
+  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .about__cubes {
+    display: block;
+  }
+}
+
 .about__avatar {
+  position: relative;
+  z-index: var(--z-content);
   display: block;
   width: 100%;
   height: auto;
@@ -134,7 +155,6 @@
 
 @media (min-width: 900px) {
   .about__visual {
-    position: relative;
     max-width: none;
     width: 100%;
   }
