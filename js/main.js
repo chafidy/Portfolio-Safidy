@@ -13,6 +13,7 @@ import { init as initFilter } from './modules/filter.js';
 import { init as initForm } from './modules/form.js';
 import { init as initTheme } from './modules/theme.js';
 import { init as initLightbox } from './modules/lightbox.js';
+import { init as initChatbot } from './modules/chatbot.js';
 
 document.documentElement.classList.add('has-js');
 
@@ -23,3 +24,4 @@ initFilter();
 initForm();
 initTheme();
 initLightbox();
+initChatbot();

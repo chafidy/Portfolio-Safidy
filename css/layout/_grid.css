@@ -23,18 +23,18 @@
 }
 
 /* Rythme vertical commun à toutes les sections du <main> */
-main > section {
+main>section {
   padding-block: var(--sp-8);
 }
 
 @media (min-width: 900px) {
-  main > section {
+  main>section {
     padding-block: var(--sp-10);
   }
 }
 
 @media (min-width: 1200px) {
-  main > section {
+  main>section {
     padding-block: var(--sp-12);
   }
 }

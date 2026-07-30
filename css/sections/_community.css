@@ -56,11 +56,23 @@
    l'agrandit encore un peu au-delà de cette hauteur — sans affecter la
    grille, puisqu'un transform ne modifie pas la boîte de mise en page. */
 .community__visual {
+  position: relative;
   justify-self: center;
   max-width: 260px;
 }
 
+.community__cubes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Cubes follow the same positioning layout as in the hero, 
+     so we just need them to be positioned relative to visual */
+}
+
 .community__avatar {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
