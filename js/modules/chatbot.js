@@ -1,8 +1,12 @@
 /**
  * FICHIER : chatbot.js
  * RÔLE    : Gère la logique de l'assistant virtuel local (sans API externe)
+ *           + Easter Egg : Jeu "Color Match" pour graphistes (tape /play ou color)
  */
 
+/* ══════════════════════════════════════════════════════════════════
+   RÉPONSES DU BOT
+══════════════════════════════════════════════════════════════════ */
 const RESPONSES = [
   {
     keywords: ["bonjour", "salut", "coucou", "hello"],
@@ -60,18 +64,208 @@ const ACTIONS = {
   "Contact": () => { window.location.hash = "#contact"; }
 };
 
+/* ══════════════════════════════════════════════════════════════════
+   EASTER EGG — COLOR MATCH GAME (POUR GRAPHISTES)
+══════════════════════════════════════════════════════════════════ */
+/**
+ * Lance le jeu Color Match dans la fenêtre de chat.
+ * Retourne une fonction cleanup() pour détruire le jeu.
+ */
+function launchColorMatch(messagesContainer) {
+  messagesContainer.style.display = 'none';
+
+  const gameWrapper = document.createElement('div');
+  gameWrapper.id = 'colormatch-wrapper';
+  gameWrapper.style.cssText = `
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #1a1a2e;
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #fff;
+    overflow-y: auto;
+  `;
+
+  // Header / Score
+  const headerEl = document.createElement('div');
+  headerEl.style.cssText = 'width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;';
+  headerEl.innerHTML = `
+    <div>
+      <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a78bfa; font-weight: 700;">🎨 COLOR MATCH</div>
+      <div id="cm-score" style="font-size: 15px; font-weight: 800; margin-top: 2px;">Score : 0 | Niveau : 1</div>
+    </div>
+    <button id="cm-exit-btn" type="button" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">Quitter ✕</button>
+  `;
+
+  // Zone cible
+  const targetBox = document.createElement('div');
+  targetBox.style.cssText = 'width: 100%; text-align: center; margin-bottom: 12px;';
+  
+  const targetLabel = document.createElement('div');
+  targetLabel.style.cssText = 'font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 6px;';
+  targetLabel.textContent = 'Trouvez cette couleur exacte :';
+
+  const targetColorCard = document.createElement('div');
+  targetColorCard.style.cssText = `
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.4);
+    border: 3px solid rgba(255,255,255,0.2);
+    transition: transform 0.3s ease;
+  `;
+
+  targetBox.appendChild(targetLabel);
+  targetBox.appendChild(targetColorCard);
+
+  // Grille de choix (6 propositions)
+  const choicesGrid = document.createElement('div');
+  choicesGrid.style.cssText = `
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+  `;
+
+  // Footer / Message
+  const statusMsg = document.createElement('div');
+  statusMsg.style.cssText = 'font-size: 12px; color: #a78bfa; text-align: center; min-height: 18px; font-weight: 600;';
+
+  const hint = document.createElement('div');
+  hint.style.cssText = 'font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 4px;';
+  hint.textContent = 'Tapez /stop pour revenir au chat';
+
+  gameWrapper.appendChild(headerEl);
+  gameWrapper.appendChild(targetBox);
+  gameWrapper.appendChild(choicesGrid);
+  gameWrapper.appendChild(statusMsg);
+  gameWrapper.appendChild(hint);
+
+  messagesContainer.parentNode.insertBefore(gameWrapper, messagesContainer.nextSibling);
+
+  // Bouton de sortie
+  const exitBtn = headerEl.querySelector('#cm-exit-btn');
+  if (exitBtn) {
+    exitBtn.addEventListener('click', () => {
+      cleanup();
+    });
+  }
+
+  // --- LOGIQUE DU JEU ---
+  let score = 0;
+  let level = 1;
+  let targetH = 0, targetS = 0, targetL = 0;
+
+  function hslToCss(h, s, l) {
+    return `hsl(${h}, ${s}%, ${l}%)`;
+  }
+
+  function nextRound() {
+    choicesGrid.innerHTML = '';
+    statusMsg.textContent = 'Choisissez la couleur correspondante !';
+    statusMsg.style.color = '#a78bfa';
+
+    // Générer une couleur cible
+    targetH = Math.floor(Math.random() * 360);
+    targetS = Math.floor(Math.random() * 45) + 50; // 50-95%
+    targetL = Math.floor(Math.random() * 40) + 30; // 30-70%
+
+    targetColorCard.style.backgroundColor = hslToCss(targetH, targetS, targetL);
+
+    // Calcul de la difficulté (l'écart entre les nuances diminue avec le niveau)
+    // Niveau 1 : écart ~ 30°, Niveau 10 : écart ~ 4°
+    const maxDelta = Math.max(4, 32 - (level * 2.5));
+
+    const correctIndex = Math.floor(Math.random() * 6);
+
+    for (let i = 0; i < 6; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.style.cssText = `
+        height: 60px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        outline: none;
+      `;
+
+      let h, s, l;
+      if (i === correctIndex) {
+        h = targetH;
+        s = targetS;
+        l = targetL;
+      } else {
+        // Variation autour de la couleur cible
+        const deltaH = (Math.random() - 0.5) * maxDelta * 2;
+        const deltaL = (Math.random() - 0.5) * (maxDelta / 2);
+        h = (targetH + deltaH + 360) % 360;
+        s = targetS;
+        l = Math.max(15, Math.min(85, targetL + deltaL));
+      }
+
+      btn.style.backgroundColor = hslToCss(h, s, l);
+
+      btn.addEventListener('mouseenter', () => {
+        btn.style.transform = 'scale(1.05)';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'scale(1)';
+      });
+
+      btn.addEventListener('click', () => {
+        if (i === correctIndex) {
+          score += 100 + level * 20;
+          level++;
+          document.getElementById('cm-score').textContent = `Score : ${score} | Niveau : ${level}`;
+          statusMsg.textContent = '✨ Excellent œil ! Niveau suivant...';
+          statusMsg.style.color = '#4ade80';
+          setTimeout(nextRound, 700);
+        } else {
+          statusMsg.textContent = '❌ Oups ! Pas tout à fait... Essayez encore !';
+          statusMsg.style.color = '#f87171';
+          btn.style.opacity = '0.3';
+          btn.style.pointerEvents = 'none';
+        }
+      });
+
+      choicesGrid.appendChild(btn);
+    }
+  }
+
+  nextRound();
+
+  return function cleanup() {
+    gameWrapper.remove();
+    messagesContainer.style.display = '';
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   INITIALISATION CHATBOT
+══════════════════════════════════════════════════════════════════ */
 export function init() {
   const chatbot = document.getElementById('chatbot');
   if (!chatbot) return;
 
-  const trigger = document.getElementById('chatbot-trigger');
-  const closeBtn = document.getElementById('chatbot-close');
-  const messagesContainer = document.getElementById('chatbot-messages');
-  const form = document.getElementById('chatbot-form');
-  const input = document.getElementById('chatbot-input');
+  const trigger           = document.getElementById('chatbot-trigger');
+  const closeBtn          = document.getElementById('chatbot-close');
+  const messagesContainer  = document.getElementById('chatbot-messages');
+  const form              = document.getElementById('chatbot-form');
+  const input             = document.getElementById('chatbot-input');
 
   let isFirstOpen = true;
   let isBotTyping = false;
+  let gameCleanup = null;
 
   // --- Masquer le chatbot dans la hero section ---
   const heroSection = document.getElementById('hero');
@@ -79,14 +273,9 @@ export function init() {
     const heroObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // La hero est visible → masquer le chatbot
           chatbot.classList.add('chatbot--hidden');
-          // Si la fenêtre est ouverte, la fermer proprement
-          if (chatbot.classList.contains('is-open')) {
-            chatbot.classList.remove('is-open');
-          }
+          if (chatbot.classList.contains('is-open')) chatbot.classList.remove('is-open');
         } else {
-          // On a quitté la hero → afficher le chatbot
           chatbot.classList.remove('chatbot--hidden');
         }
       },
@@ -109,13 +298,42 @@ export function init() {
   });
 
   closeBtn.addEventListener('click', () => {
+    if (gameCleanup) { gameCleanup(); gameCleanup = null; }
     chatbot.classList.remove('is-open');
   });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = input.value.trim();
-    if (text && !isBotTyping) {
+    if (!text) return;
+
+    // ══ EASTER EGG : commandes secrètes ══
+    if (['/play', 'jeu', '/jeu', 'color', 'design', 'colormatch'].includes(text.toLowerCase())) {
+      addUserMessage(text);
+      input.value = '';
+      if (!gameCleanup) {
+        setTimeout(() => {
+          addBotMessage("🎨 Jeu Color Match activé ! Testez votre œil de graphiste. Tapez /stop pour quitter.", []);
+          setTimeout(() => {
+            gameCleanup = launchColorMatch(messagesContainer);
+          }, 800);
+        }, 400);
+      }
+      return;
+    }
+
+    if (['/stop', 'stop', '/exit', 'quitter'].includes(text.toLowerCase())) {
+      input.value = '';
+      if (gameCleanup) {
+        gameCleanup();
+        gameCleanup = null;
+        addBotMessage("Retour au chat 💬 Comment puis-je vous aider ?", ["Quels sont vos services ?", "Faire un devis", "Contact"]);
+      }
+      return;
+    }
+
+    // Message normal
+    if (!isBotTyping) {
       handleUserMessage(text);
       input.value = '';
     }
@@ -124,41 +342,24 @@ export function init() {
   function handleUserMessage(text) {
     addUserMessage(text);
     isBotTyping = true;
-    
-    // Simulate thinking delay
     const delay = 600 + Math.random() * 800;
-    
     const typingIndicator = addTypingIndicator();
-
     setTimeout(() => {
       typingIndicator.remove();
       const response = findBestResponse(text);
       addBotMessage(response.answer, response.options);
-      
-      // Execute side effect if it matches an action
-      if (ACTIONS[text]) {
-        ACTIONS[text]();
-      }
-      
+      if (ACTIONS[text]) ACTIONS[text]();
       isBotTyping = false;
     }, delay);
   }
 
   function findBestResponse(text) {
     const lowerText = text.toLowerCase();
-    
     for (const res of RESPONSES) {
-      if (res.keywords.some(kw => lowerText.includes(kw))) {
-        return res;
-      }
+      if (res.keywords.some(kw => lowerText.includes(kw))) return res;
     }
-    
-    // Check if the exact text is one of the options without a specific keyword mapping
-    if (["Quels sont vos services ?", "Faire un devis"].includes(text)) {
-      if (text === "Quels sont vos services ?") return RESPONSES.find(r => r.keywords.includes("service"));
-      if (text === "Faire un devis") return RESPONSES.find(r => r.keywords.includes("devis"));
-    }
-    
+    if (text === "Quels sont vos services ?") return RESPONSES.find(r => r.keywords.includes("service"));
+    if (text === "Faire un devis")            return RESPONSES.find(r => r.keywords.includes("devis"));
     return DEFAULT_ANSWER;
   }
 
@@ -167,35 +368,25 @@ export function init() {
     msgEl.className = 'chat-msg chat-msg--bot';
     msgEl.textContent = text;
     messagesContainer.appendChild(msgEl);
-    
+
     if (options && options.length > 0) {
       const optionsContainer = document.createElement('div');
       optionsContainer.className = 'chat-quick-replies';
-      
       options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'chat-quick-reply';
         btn.type = 'button';
         btn.textContent = opt;
-        btn.addEventListener('click', () => {
-          if (!isBotTyping) {
-            handleUserMessage(opt);
-          }
-        });
+        btn.addEventListener('click', () => { if (!isBotTyping) handleUserMessage(opt); });
         optionsContainer.appendChild(btn);
       });
-      
       messagesContainer.appendChild(optionsContainer);
     }
-    
     scrollToBottom();
   }
 
   function addUserMessage(text) {
-    // Remove any previous quick replies to clean up UI
-    const existingReplies = messagesContainer.querySelectorAll('.chat-quick-replies');
-    existingReplies.forEach(el => el.remove());
-
+    messagesContainer.querySelectorAll('.chat-quick-replies').forEach(el => el.remove());
     const msgEl = document.createElement('div');
     msgEl.className = 'chat-msg chat-msg--user';
     msgEl.textContent = text;
