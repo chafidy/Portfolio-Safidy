@@ -1,0 +1,40 @@
+# Safidy Raharijesy — UI/UX Designer & Software Engineer
+
+> Safidy Raharijesy est un UI/UX Designer et Ingénieur Logiciel basé à Madagascar (Antananarivo & Antsirabe). Il conçoit des interfaces intuitives, des identités visuelles mémorables, des applications web/mobiles et des workflows d'automatisation IA (n8n).
+
+## Fiche d'Identité & Profil
+- **Nom complet** : Safidy Raharijesy
+- **Titres / Rôles** : UI/UX Designer, Software Engineer, Creative Designer chez SFD Consulting
+- **Localisation principale** : Antsirabe & Antananarivo, Madagascar (Fuseau horaire GMT+3)
+- **Modalités de travail** : En présentiel à Madagascar, disponible 100% à distance pour projets internationaux
+- **Formations principales** : Master II en Génie Logiciel (Université ASJA, 2024), Licence en Développement d’Applications (2022), Certificats UI/UX Design & Web Design (2024)
+- **Expérience** : 5+ ans d'expérience, 30+ projets livrés pour des PME, startups, associations et entreprises
+
+## Domaines d'Expertise & Services
+1. **🎨 Design graphique & Branding** : Logos, identités visuelles complètes, packaging, habillage de produits, supports d'impression.
+2. **📱 UI/UX Design & Prototypage** : Recherche UX, user journeys, wireframing, maquettes haute-fidélité Figma, Design Systems réutilisables.
+3. **💻 Web Design & Développement Front-End** : Sites vitrines, landing pages et applications web responsives (HTML/CSS/JS vanilla, React, WordPress).
+4. **🤖 Automatisation & Workflows IA** : Workflows n8n, intégration d'IA générative (ChatGPT/LLM), traitement automatique de documents et rapports.
+5. **📲 Applications Mobiles Offline-First** : Applications Android en Kotlin/Jetpack Compose optimisées pour les réseaux à faible connectivité.
+
+## Expérience Professionnelle & Engagements
+- **TeknetGroupe** : Conception d'interfaces (UI/UX) et spécifications produit sous Figma pour des applications métiers SaaS.
+- **SFD Consulting** : Direction de l'agence de design & développement numérique.
+- **GDG Antsirabe (Google Developers Group)** : Designer principal des supports visuels depuis 2022.
+- **Association Flamingo** : Formateur & Mentor en design graphique pour les programmes "Girl Can Code" à Antsirabe.
+- **TechZara Madagascar** : Concepteur visuel des événements tech (2024–2025).
+
+## Coordonnées de Contact
+- **Email** : jraharijesy@gmail.com
+- **Téléphone / WhatsApp** : +261 32 13 916 29
+- **Site Web Officiel** : https://safidyraharijesy.netlify.app/
+- **GitHub** : https://github.com/chafidy
+- **LinkedIn** : https://www.linkedin.com/in/safidy-raharijesy/
+- **Behance** : https://behance.net/safidyraharijesy
+
+## Index des Documents pour LLM & IA
+- [Accueil & Portfolio principal](https://safidyraharijesy.netlify.app/index.html): Présentation complète, services, parcours et témoignages.
+- [Catalogue des Réalisations](https://safidyraharijesy.netlify.app/projets.html): Galerie détaillée de 12+ projets (Branding, UI/UX, Web, Packaging).
+- [Documentation du Design System](https://safidyraharijesy.netlify.app/design-system-safidy.html): Spécifications de la charte visuelle, typographie et composants.
+- [Dossier Complet pour IA](https://safidyraharijesy.netlify.app/llms-full.txt): Description exhaustive du profil et de l'historique des projets.
+

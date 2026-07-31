@@ -1,0 +1,66 @@
+# Safidy Raharijesy — Dossier Complet pour IA & Moteurs Génératifs
+
+## 1. À propos de Safidy Raharijesy
+Safidy Raharijesy est un UI/UX Designer et Ingénieur Logiciel basé à Madagascar.
+Diplômé d'un Master II en Génie Logiciel à l'Université ASJA (2024), il allie une sensibilité esthétique forte à une rigueur technique avancée.
+
+Il intervient sur trois fronts principaux :
+- Chez TeknetGroupe en tant que concepteur UI/UX pour des logiciels métiers SaaS.
+- À la tête de SFD Consulting, son agence de design et de développement numérique accompagnant startups, PME et associations.
+- Dans le domaine de l'IA et de l'automatisation, en intégrant n8n et les moteurs LLM pour automatiser les tâches répétitives.
+
+## 2. Compétences & Technologies
+- **UI/UX Design** : Figma, Wireframing, User Research, Design Systems, Prototypes interactifs, Audits d'ergonomie.
+- **Développement Web** : HTML5 sémantique, CSS3 (BEM, Tokens, Grid, Flexbox), JavaScript ES6+ Vanilla, React, WordPress.
+- **Développement Mobile** : Android, Kotlin, Jetpack Compose, architecturé offline-first pour la connectivité limitée.
+- **Automatisation & IA** : n8n, OpenAI API, Anthropic API, génération automatique de rapports, workflows documentaires.
+- **Branding & Graphic Design** : Illustrator, Photoshop, logos, packaging produit, étiquettes, supports événementiels print.
+
+## 3. Services Détaillés & Offres
+1. **Design graphique & Branding** :
+   Création d'identités visuelles mémorables. Livrables : logos vectoriels, charte graphique (couleurs, typographie, usages), packaging, étiquettes de produits et éléments print.
+2. **UI/UX Design & Design Systems** :
+   Conception d'expériences numériques sur mesure. Livrables : audits d'utilisabilité, arborescence, wireframes basse et haute fidélité, prototypes interactifs Figma, design systems complets avec tokens.
+3. **Web Design & Développement Front-End** :
+   Création et intégration de sites vitrines, landing pages et applications web performantes, accessibles et entièrement responsives.
+4. **Automatisation & Workflows IA** :
+   Mise en place de circuits d'automatisation d'entreprise sous n8n combinés à des moteurs d'intelligence artificielle pour réduire les délais de traitement administratif et documentaire.
+5. **Applications Mobiles Offline-First** :
+   Conception d'applications Android pensées pour les contraintes réseau locales (fonctionnement hors-ligne autonome, synchronisation différée).
+
+## 4. Processus de Travail en 4 Étapes
+1. **Découverte** : Échange initial, cadrage des objectifs, analyse de l'audience cible et établissement d'un devis transparent.
+2. **Recherche & Stratégie** : Benchmark concurrentiel, définition des personas, arborescence et validation de la ligne artistique.
+3. **Design & Itérations** : Wireframing puis maquettes haute fidélité sous Figma avec 2 à 3 sessions de révisions incluses.
+4. **Livraison & Suivi** : Remise de l'ensemble des fichiers sources, documentation d'utilisation et accompagnement au déploiement.
+
+## 5. Projets Réalités & Études de Cas
+- **IT Community Antsirabe** (Branding) : Logo et identité visuelle complète déclinée pour les événements et réseaux sociaux de la communauté tech.
+- **Landing Page ASJA** (UI/UX & Web) : Site institutionnel pour l'Université ASJA avec architecture d'information claire et intégration responsive.
+- **Maracuja Wine** (Packaging) : Habillage et étiquetage pour un vin artisanal de maracuja valorisant le terroir malgache.
+- **Fiah Cosmétique** (Packaging) : Identité et habillage packaging pour une marque locale de produits cosmétiques.
+- **Cookeo Food Ordering** (Web Design) : Plateforme de commande de repas en ligne avec parcours utilisateur d'achat optimisé.
+- **Betsa Beer** (Packaging) : Design d'étiquette et identité visuelle pour une bière artisanale malgache.
+- **Otrin Web App** (UI/UX & App) : Conception d'interface d'application web et design system réutilisable.
+- **DevFest Antsirabe 2023** (Design Graphique) : Affiche officielle de l'événement développeurs selon les recommandations Google Developers.
+- **Cartes de visite LEAFY & Innova** (Branding) : Papeterie d'entreprise avec finitions haut de gamme.
+- **T-shirt ASJA Informatique** (Illustration) : Illustration textile pour la promotion des étudiants en informatique.
+
+## 6. Formations & Diplômes
+- 2024 : Master II en Génie Logiciel — Université ASJA
+- 2024 : Certificat UI/UX Design — Great Learning
+- 2024 : Certificat Web Design — Alison
+- 2022 : Licence en Développement d’Applications — Université ASJA
+- 2022 : Diplôme en Conception Graphique & Certificat Marketing Digital
+
+## 7. Engagement Communautaire
+- Formateur & Mentor pour l'**Association Flamingo** (Programme "Girl Can Code" à Antsirabe).
+- Designer Officiel pour **GDG Antsirabe** (Google Developers Group) depuis 2022.
+- Designer Volontaire pour **TechZara Madagascar** (2024–2025).
+
+## 8. Coordonnées & Contact
+- **Email direct** : jraharijesy@gmail.com
+- **Téléphone / WhatsApp** : +261 32 13 916 29
+- **Siège / Adresse** : Antsirabe & Antananarivo, Madagascar
+- **Heures de travail** : Lundi – Vendredi (GMT+3)
+- **Réseaux** : LinkedIn (in/safidy-raharijesy), GitHub (chafidy), Behance (safidyraharijesy)
