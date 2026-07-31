@@ -103,8 +103,7 @@
     <!-- ============ CLIENTS / LOGOS DÉFILANTS ============ -->
     <section class="clients" aria-label="Marques et clients">
       <div class="clients__inner">
-        <div class="clients__track" aria-hidden="true">
-          <!-- Série 1 -->
+        <div class="clients__track">
           <div class="clients__logos">
             <img class="clients__logo" src="assets/clients/303 rhum-Photoroom.webp" alt="303 Rhum">
             <img class="clients__logo" src="assets/clients/asja université-Photoroom.webp" alt="ASJA Université">
@@ -124,7 +123,47 @@
             <img class="clients__logo" src="assets/clients/urban visio-Photoroom.webp" alt="Urban Visio">
             <img class="clients__logo" src="assets/clients/zarina-Photoroom.webp" alt="Zarina">
           </div>
-          <!-- Série 2 (clone pour boucle seamless) -->
+          <!-- Clone pour boucle seamless -->
+          <div class="clients__logos" aria-hidden="true">
+            <img class="clients__logo" src="assets/clients/303 rhum-Photoroom.webp" alt="303 Rhum">
+            <img class="clients__logo" src="assets/clients/asja université-Photoroom.webp" alt="ASJA Université">
+            <img class="clients__logo" src="assets/clients/devfest-Photoroom.webp" alt="DevFest Antsirabe">
+            <img class="clients__logo" src="assets/clients/eterna-Photoroom.webp" alt="Eterna">
+            <img class="clients__logo" src="assets/clients/hairaozy-Photoroom.webp" alt="Hairaozy">
+            <img class="clients__logo" src="assets/clients/iemtc export-Photoroom.webp" alt="IEMTC Export">
+            <img class="clients__logo" src="assets/clients/iemtc madagascar-Photoroom.webp" alt="IEMTC Madagascar">
+            <img class="clients__logo" src="assets/clients/it community-Photoroom.webp" alt="IT Community Antsirabe">
+            <img class="clients__logo" src="assets/clients/make it shine-Photoroom.webp" alt="Make It Shine">
+            <img class="clients__logo" src="assets/clients/mouna fruit séché-Photoroom.webp" alt="Mouna Fruit Séché">
+            <img class="clients__logo" src="assets/clients/otrin-Photoroom.webp" alt="Otrin">
+            <img class="clients__logo" src="assets/clients/pharmatech-Photoroom.webp" alt="PharmaTech">
+            <img class="clients__logo" src="assets/clients/pim collect-Photoroom.webp" alt="PIM Collect">
+            <img class="clients__logo" src="assets/clients/rawesy-Photoroom.webp" alt="Rawesy">
+            <img class="clients__logo" src="assets/clients/techzara-Photoroom.webp" alt="Techzara">
+            <img class="clients__logo" src="assets/clients/urban visio-Photoroom.webp" alt="Urban Visio">
+            <img class="clients__logo" src="assets/clients/zarina-Photoroom.webp" alt="Zarina">
+          </div>
+          <!-- Clone 2 pour boucle seamless -->
+          <div class="clients__logos" aria-hidden="true">
+            <img class="clients__logo" src="assets/clients/303 rhum-Photoroom.webp" alt="303 Rhum">
+            <img class="clients__logo" src="assets/clients/asja université-Photoroom.webp" alt="ASJA Université">
+            <img class="clients__logo" src="assets/clients/devfest-Photoroom.webp" alt="DevFest Antsirabe">
+            <img class="clients__logo" src="assets/clients/eterna-Photoroom.webp" alt="Eterna">
+            <img class="clients__logo" src="assets/clients/hairaozy-Photoroom.webp" alt="Hairaozy">
+            <img class="clients__logo" src="assets/clients/iemtc export-Photoroom.webp" alt="IEMTC Export">
+            <img class="clients__logo" src="assets/clients/iemtc madagascar-Photoroom.webp" alt="IEMTC Madagascar">
+            <img class="clients__logo" src="assets/clients/it community-Photoroom.webp" alt="IT Community Antsirabe">
+            <img class="clients__logo" src="assets/clients/make it shine-Photoroom.webp" alt="Make It Shine">
+            <img class="clients__logo" src="assets/clients/mouna fruit séché-Photoroom.webp" alt="Mouna Fruit Séché">
+            <img class="clients__logo" src="assets/clients/otrin-Photoroom.webp" alt="Otrin">
+            <img class="clients__logo" src="assets/clients/pharmatech-Photoroom.webp" alt="PharmaTech">
+            <img class="clients__logo" src="assets/clients/pim collect-Photoroom.webp" alt="PIM Collect">
+            <img class="clients__logo" src="assets/clients/rawesy-Photoroom.webp" alt="Rawesy">
+            <img class="clients__logo" src="assets/clients/techzara-Photoroom.webp" alt="Techzara">
+            <img class="clients__logo" src="assets/clients/urban visio-Photoroom.webp" alt="Urban Visio">
+            <img class="clients__logo" src="assets/clients/zarina-Photoroom.webp" alt="Zarina">
+          </div>
+          <!-- Clone 3 pour boucle seamless -->
           <div class="clients__logos" aria-hidden="true">
             <img class="clients__logo" src="assets/clients/303 rhum-Photoroom.webp" alt="303 Rhum">
             <img class="clients__logo" src="assets/clients/asja université-Photoroom.webp" alt="ASJA Université">
@@ -147,6 +186,7 @@
         </div>
       </div>
     </section>
+
 
     <!-- ============ À PROPOS ============ -->
     <section class="about" id="about" aria-labelledby="about-title">
@@ -728,37 +768,58 @@
           <div class="contact__technos">
             <span class="contact__info-label">Technologies & Outils</span>
             <div class="techno-grid">
-              <div class="techno-card"><img src="assets/techno/5094051dac77593d0f0978bdcbabaf79e5bb855c-1080x1080.png"
-                  alt="Technologie 1" loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/70-701332_hire-node-js-developer-node-logo.png"
-                  alt="Node JS" loading="lazy"></div>
-              <div class="techno-card"><img
-                  src="assets/techno/adobe-photoshop-cc-icon-app-logo-editable-transparent-background-social-media-design-for-digital-download-free-png.webp"
+              <!-- Figma : violet -->
+              <div class="techno-card" style="--tc:#a259ff" title="Figma"><img
+                  src="assets/techno/5094051dac77593d0f0978bdcbabaf79e5bb855c-1080x1080_nobg.png" alt="Figma"
+                  loading="lazy"></div>
+              <!-- Node.js : vert -->
+              <div class="techno-card" style="--tc:#3c873a" title="Node.js"><img
+                  src="assets/techno/70-701332_hire-node-js-developer-node-logo_nobg.png" alt="Node JS" loading="lazy">
+              </div>
+              <!-- Photoshop : bleu -->
+              <div class="techno-card" style="--tc:#31a8ff" title="Photoshop"><img
+                  src="assets/techno/adobe-photoshop-cc-icon-app-logo-editable-transparent-background-social-media-design-for-digital-download-free-png_nobg.png"
                   alt="Photoshop" loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/adobe-xd-logo-png_seeklogo-312271.png" alt="Adobe XD"
+              <!-- Premiere Pro : violet foncé -->
+              <div class="techno-card" style="--tc:#9999ff" title="Premiere Pro"><img
+                  src="assets/techno/adobe-premier-pro-logo-icon-free-vector_nobg.png" alt="Adobe Premiere Pro"
                   loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/Claude_AI_symbol.svg.webp" alt="Claude AI"
+              <!-- Claude AI : orange cuivré -->
+              <div class="techno-card" style="--tc:#d97757" title="Claude AI"><img
+                  src="assets/techno/Claude_AI_symbol_nobg.png" alt="Claude AI" loading="lazy"></div>
+              <!-- React : cyan -->
+              <div class="techno-card" style="--tc:#61dafb" title="Kotlin"><img
+                  src="assets/techno/ko114k438-kotlin-logo-kotlin-logo-png-transparent-amp-svg-vector-freebie-supply-Photoroom.png"
+                  alt="Kotlin" loading="lazy">
+              </div>
+              <!-- Illustrator : orange -->
+              <div class="techno-card" style="--tc:#ff9a00" title="Illustrator"><img
+                  src="assets/techno/Illustrator-logo_nobg.png" alt="Illustrator" loading="lazy"></div>
+              <!-- Flutter : bleu clair -->
+              <div class="techno-card" style="--tc:#54c5f8" title="Typescript"><img
+                  src="assets/techno/images (4)_nobg.png" alt="Typescript" loading="lazy"></div>
+              <!-- Tailwind : cyan-teal -->
+              <div class="techno-card" style="--tc:#38bdf8" title="Lovable"><img
+                  src="assets/techno/images (40)_nobg.png" alt="Lovable" loading="lazy"></div>
+              <!-- Make : violet -->
+              <div class="techno-card" style="--tc:#6d00cc" title="Make"><img src="assets/techno/make-color.png"
+                  alt="Make" loading="lazy"></div>
+              <!-- PostgreSQL : bleu-gris -->
+              <div class="techno-card" style="--tc:#336791" title="PostgreSQL"><img
+                  src="assets/techno/Postgresql_elephant_nobg.png" alt="PostgreSQL" loading="lazy"></div>
+              <!-- Python : jaune/bleu -->
+              <div class="techno-card" style="--tc:#ffd343" title="Python"><img
+                  src="assets/techno/Python-logo-notext_nobg.png" alt="Python" loading="lazy"></div>
+              <!-- CapCut : noir -->
+              <div class="techno-card" style="--tc:#1a1a1a" title="CapCut"><img
+                  src="assets/techno/CapCut-Logo-video-editing-transparent-PNG-image-jpg-Photoroom.png" alt="CapCut"
                   loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/f440c5115af253e7b8dfdd241a45ccb8e494e8a6.png"
-                  alt="Technologie" loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/Illustrator-logo.jpg" alt="Illustrator" loading="lazy">
-              </div>
-
-              <div class="techno-card"><img src="assets/techno/images (4).png" alt="Outil" loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/images (40).jpg" alt="Outil" loading="lazy"></div>
-
-              <div class="techno-card"><img src="assets/techno/make-logo-freelogovectors.net_.png" alt="Make"
+              <!-- n8n : rouge-orange -->
+              <div class="techno-card" style="--tc:#ea4b71" title="n8n"><img src="assets/techno/n8n-icon.webp" alt="n8n"
                   loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/Postgresql_elephant.svg.webp" alt="PostgreSQL"
-                  loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/Python-logo-notext.svg.webp" alt="Python" loading="lazy">
-              </div>
-              <div class="techno-card"><img src="assets/techno/tailwind-css-logo-png_seeklogo-434090.png"
-                  alt="Tailwind CSS" loading="lazy"></div>
-              <div class="techno-card"><img src="assets/techno/vertical-align.png" alt="Vertical Align" loading="lazy">
-              </div>
-              <div class="techno-card"><img src="assets/techno/Wordpress-Logo.svg.webp" alt="WordPress" loading="lazy">
-              </div>
+              <!-- WordPress : bleu -->
+              <div class="techno-card" style="--tc:#21759b" title="WordPress"><img
+                  src="assets/techno/Wordpress-Logo_nobg.png" alt="WordPress" loading="lazy"></div>
             </div>
           </div>
         </div>
@@ -868,11 +929,14 @@
   <div class="chatbot" id="chatbot">
     <!-- Bouton flottant -->
     <button class="chatbot__trigger" id="chatbot-trigger" aria-label="Ouvrir l'assistant" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path
+          d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+        </path>
       </svg>
     </button>
-    
+
     <!-- Fenêtre de chat -->
     <div class="chatbot__window" id="chatbot-window">
       <div class="chatbot__header">
@@ -884,21 +948,24 @@
           <span class="chatbot__status">En ligne</span>
         </div>
         <button class="chatbot__close" id="chatbot-close" aria-label="Fermer le chat" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
-      
+
       <div class="chatbot__messages" id="chatbot-messages">
         <!-- Les messages seront injectés ici par JS -->
       </div>
-      
+
       <form class="chatbot__input-area" id="chatbot-form">
-        <input type="text" id="chatbot-input" class="chatbot__input" placeholder="Écrivez votre message..." autocomplete="off">
+        <input type="text" id="chatbot-input" class="chatbot__input" placeholder="Écrivez votre message..."
+          autocomplete="off">
         <button type="submit" class="chatbot__send" aria-label="Envoyer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>

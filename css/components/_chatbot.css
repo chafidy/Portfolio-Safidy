@@ -301,3 +301,23 @@
     height: 30px;
   }
 }
+
+/* ── Masquage dans la hero section ────────────────────────────────────── */
+.chatbot--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.85);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* S'assurer que la transition fonctionne aussi au retour */
+.chatbot:not(.chatbot--hidden) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}

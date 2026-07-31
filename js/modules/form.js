@@ -1,125 +1,121 @@
 /**
  * FICHIER : form.js
- * RÔLE    : Validation temps réel du formulaire de contact et simulation
- *           d'envoi (aucune requête réseau réelle). Sans JavaScript, le
- *           formulaire s'appuie sur la validation HTML native (attributs
- *           required / type="email" déjà présents dans le HTML) : c'est
- *           pourquoi init() active novalidate uniquement lorsque ce
- *           module prend le relais.
+ * RÔLE    : Validation temps réel du formulaire de contact.
+ *           À la soumission, construit un lien mailto: avec tous les champs
+ *           et ouvre le client mail du visiteur (Gmail, Outlook, etc.).
+ *           Zéro dépendance externe — fonctionne entièrement côté navigateur.
  */
 
-const form = document.getElementById('contact-form');
-const nameInput = document.getElementById('contact-name');
-const emailInput = document.getElementById('contact-email');
-const typeSelect = document.getElementById('contact-type');
+/* ══════════════════════════════════════════════════════════════════
+   ADRESSE DE RÉCEPTION
+   ← Mettez ici votre adresse email
+══════════════════════════════════════════════════════════════════ */
+const RECIPIENT_EMAIL = 'jraharijesy@gmail.com';
+
+/* ══════════════════════════════════════════════════════════════════
+   SÉLECTEURS
+══════════════════════════════════════════════════════════════════ */
+const form         = document.getElementById('contact-form');
+const nameInput    = document.getElementById('contact-name');
+const emailInput   = document.getElementById('contact-email');
+const typeSelect   = document.getElementById('contact-type');
+const budgetInput  = document.getElementById('contact-budget');
 const messageInput = document.getElementById('contact-message');
 const submitButton = form?.querySelector('.form__submit');
-const statusEl = document.getElementById('form-status');
+const statusEl     = document.getElementById('form-status');
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SUBMIT_DELAY_MS = 900;
 
-/** @returns {string} Message d'erreur, ou chaîne vide si valide. */
-function validateName() {
-  return nameInput.value.trim() ? '' : "Merci d'indiquer votre nom.";
-}
-
-/** @returns {string} Message d'erreur, ou chaîne vide si valide. */
+/* ══════════════════════════════════════════════════════════════════
+   VALIDATEURS
+══════════════════════════════════════════════════════════════════ */
+function validateName()    { return nameInput.value.trim()   ? '' : "Merci d'indiquer votre nom."; }
 function validateEmail() {
-  const value = emailInput.value.trim();
-  if (!value) return "Merci d'indiquer votre email.";
-  if (!EMAIL_PATTERN.test(value)) return 'Format d\'email invalide (ex. : nom@domaine.com).';
+  const v = emailInput.value.trim();
+  if (!v) return "Merci d'indiquer votre email.";
+  if (!EMAIL_PATTERN.test(v)) return "Format d'email invalide (ex. : nom@domaine.com).";
   return '';
 }
-
-/** @returns {string} Message d'erreur, ou chaîne vide si valide. */
-function validateType() {
-  return typeSelect.value ? '' : 'Merci de sélectionner un type de projet.';
-}
-
-/** @returns {string} Message d'erreur, ou chaîne vide si valide. */
-function validateMessage() {
-  return messageInput.value.trim() ? '' : 'Merci de décrire votre projet en quelques mots.';
-}
+function validateType()    { return typeSelect.value         ? '' : 'Merci de sélectionner un type de projet.'; }
+function validateMessage() { return messageInput.value.trim() ? '' : 'Merci de décrire votre projet en quelques mots.'; }
 
 const fieldValidators = new Map([
-  [nameInput, validateName],
-  [emailInput, validateEmail],
-  [typeSelect, validateType],
+  [nameInput,    validateName],
+  [emailInput,   validateEmail],
+  [typeSelect,   validateType],
   [messageInput, validateMessage],
 ]);
 
-/**
- * Valide un champ et met à jour son état visuel (.form__field--error),
- * son message d'aide et son attribut aria-invalid.
- * @param {HTMLElement} input - Champ à valider.
- * @returns {boolean} Vrai si le champ est valide.
- */
+/* ══════════════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════════════ */
 function validateSingle(input) {
   const validate = fieldValidators.get(input);
   if (!validate) return true;
-
-  const field = input.closest('.form__field');
-  const hint = field?.querySelector('.form__hint');
+  const field   = input.closest('.form__field');
+  const hint    = field?.querySelector('.form__hint');
   const message = validate();
   const isValid = !message;
-
   field?.classList.toggle('form__field--error', !isValid);
   input.setAttribute('aria-invalid', String(!isValid));
   if (hint) hint.textContent = message;
-
   return isValid;
 }
 
-/**
- * Affiche un message dans la zone de statut (aria-live).
- * @param {string} message - Texte à annoncer.
- * @param {'success' | 'error'} tone - Style à appliquer.
- */
 function setStatus(message, tone) {
   if (!statusEl) return;
   statusEl.textContent = message;
   statusEl.classList.toggle('form__status--success', tone === 'success');
-  statusEl.classList.toggle('form__status--error', tone === 'error');
+  statusEl.classList.toggle('form__status--error',   tone === 'error');
 }
 
-/**
- * Valide l'ensemble du formulaire, puis simule l'envoi (aucun réseau).
- * @param {SubmitEvent} event
- */
+/* ══════════════════════════════════════════════════════════════════
+   ENVOI VIA MAILTO
+══════════════════════════════════════════════════════════════════ */
 function handleSubmit(event) {
   event.preventDefault();
 
-  const inputs = [...fieldValidators.keys()];
-  const results = inputs.map((input) => validateSingle(input));
-  const firstInvalidIndex = results.indexOf(false);
+  // Validation côté client
+  const inputs           = [...fieldValidators.keys()];
+  const results          = inputs.map((input) => validateSingle(input));
+  const firstInvalidIdx  = results.indexOf(false);
 
-  if (firstInvalidIndex !== -1) {
-    inputs[firstInvalidIndex].focus();
-    setStatus('Merci de corriger les champs indiqués avant d\'envoyer le message.', 'error');
+  if (firstInvalidIdx !== -1) {
+    inputs[firstInvalidIdx].focus();
+    setStatus("Merci de corriger les champs indiqués avant d'envoyer le message.", 'error');
     return;
   }
 
-  submitButton.disabled = true;
-  submitButton.textContent = 'Envoi en cours…';
-  setStatus('Envoi en cours…', null);
+  // Récupération des valeurs
+  const name    = nameInput.value.trim();
+  const email   = emailInput.value.trim();
+  const type    = typeSelect.value;
+  const budget  = budgetInput?.value.trim() || 'Non précisé';
+  const message = messageInput.value.trim();
 
-  window.setTimeout(() => {
-    form.reset();
-    inputs.forEach((input) => {
-      input.closest('.form__field')?.classList.remove('form__field--error');
-      input.removeAttribute('aria-invalid');
-    });
-    submitButton.disabled = false;
-    submitButton.textContent = 'Envoyer le message';
-    setStatus('Message envoyé ! Je vous réponds sous 24 h.', 'success');
-  }, SUBMIT_DELAY_MS);
+  // Construction du sujet et du corps de l'email
+  const subject = `Demande de devis — ${type} — ${name}`;
+  const body = [
+    `Nom : ${name}`,
+    `Email : ${email}`,
+    `Type de projet : ${type}`,
+    `Budget indicatif : ${budget}`,
+    ``,
+    `Message :`,
+    message,
+  ].join('\n');
+
+  // Construction du lien mailto et ouverture du client mail
+  const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoLink;
+
+  // Confirmation visuelle
+  setStatus('✅ Votre client mail va s\'ouvrir pour envoyer le message.', 'success');
 }
 
-/**
- * Initialise la validation temps réel et la simulation d'envoi du
- * formulaire de contact. Ne fait rien si le formulaire est absent du DOM.
- */
+/* ══════════════════════════════════════════════════════════════════
+   INITIALISATION
+══════════════════════════════════════════════════════════════════ */
 export function init() {
   if (!form) return;
 

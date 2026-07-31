@@ -48,30 +48,67 @@
 
 .techno-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
   gap: var(--sp-3);
-  max-width: 400px;
+  max-width: 420px;
 }
 
+/* ── Techno cards : fond blanc au repos, animations colorées au hover ── */
 .techno-card {
+  --tc: #7c3aed;           /* couleur de marque, surchargée inline */
+  position: relative;
   aspect-ratio: 1;
-  background: var(--clay-white);
-  border-radius: var(--radius-sm, 12px);
-  box-shadow: var(--shadow-clay-sm);
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--clay-white, #ffffff);
+  box-shadow: var(--shadow-clay-sm);
+  overflow: hidden;
+  transition: box-shadow 0.35s ease, transform 0.3s ease;
 }
 
-.techno-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-clay-md);
+/* slide coloré qui monte depuis le bas */
+.techno-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--tc) 30%, transparent) 0%,
+    transparent 65%
+  );
+  z-index: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1),
+              opacity 0.35s ease;
+  pointer-events: none;
 }
 
 .techno-card img {
-  max-width: 100%;
-  max-height: 100%;
+  position: relative;
+  z-index: 1;
+  max-width: 70%;
+  max-height: 70%;
   object-fit: contain;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* ── Hover ── */
+.techno-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 24px 2px color-mix(in srgb, var(--tc) 35%, transparent),
+              var(--shadow-clay-md);
+}
+
+.techno-card:hover::after {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+.techno-card:hover img {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--tc) 50%, transparent));
 }

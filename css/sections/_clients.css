@@ -1,89 +1,96 @@
 /**
  * FICHIER : _clients.css
- * RÔLE    : Bandeau de logos clients défilant de droite à gauche, infini.
- *           Logos en noir & blanc par défaut, couleur au survol.
- *           Fond identique au hero (--clay-cream).
+ * RÔLE    : Section affichant les logos clients en défilement infini horizontal.
  */
 
+/* ══════════════════════════════════════════════════════════════════════════
+   SECTION
+══════════════════════════════════════════════════════════════════════════ */
 .clients {
-  padding: var(--sp-8) 0;
-  background: var(--clay-cream); /* Même fond que le hero */
+  position: relative;
+  padding: var(--sp-4) 0;
+  background: var(--clay-cream);
   overflow: hidden;
 }
 
-/* Wrapper masquant le débordement avec fondu sur les bords */
+/* ══════════════════════════════════════════════════════════════════════════
+   INNER (Wrapper pour effet de fondu sur les bords, optionnel)
+══════════════════════════════════════════════════════════════════════════ */
 .clients__inner {
   width: 100%;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  /* Effet de fondu sur les bords gauche et droit pour une belle transition */
   -webkit-mask-image: linear-gradient(
     to right,
-    transparent 0%,
-    black 6%,
-    black 94%,
-    transparent 100%
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
   );
   mask-image: linear-gradient(
     to right,
-    transparent 0%,
-    black 6%,
-    black 94%,
-    transparent 100%
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
   );
 }
 
-/* Track : 2 séries pour boucle seamless */
+/* ══════════════════════════════════════════════════════════════════════════
+   TRACK — piste animée
+══════════════════════════════════════════════════════════════════════════ */
 .clients__track {
   display: flex;
   width: max-content;
-  animation: marquee-logos 35s linear infinite;
+  animation: marquee-ltr 34s linear infinite;
 }
 
-/* Pause au hover sur tout le track */
 .clients__track:hover {
   animation-play-state: paused;
 }
 
-/* Un groupe de logos */
+/* ══════════════════════════════════════════════════════════════════════════
+   GROUPE DE LOGOS
+══════════════════════════════════════════════════════════════════════════ */
 .clients__logos {
   display: flex;
   align-items: center;
-  gap: 5rem;
-  padding: 0 5rem;
+  gap: 4rem;
+  padding-right: 4rem; /* Pour jonction parfaite avec le clone */
   flex-shrink: 0;
 }
 
-/* Logo individuel — agrandi */
+/* ══════════════════════════════════════════════════════════════════════════
+   LOGO INDIVIDUEL
+══════════════════════════════════════════════════════════════════════════ */
 .clients__logo {
-  height: 100px;
+  height: 140px;
   width: auto;
-  max-width: 220px;
+  max-width: 320px;
   object-fit: contain;
-
-  /* Noir & blanc par défaut */
-  filter: grayscale(100%) brightness(0.35);
-  opacity: 0.65;
-
-  transition:
-    filter 0.35s ease,
-    opacity 0.35s ease,
-    transform 0.25s ease;
+  opacity: 1; /* Garde la couleur originale */
+  transition: transform 0.25s ease;
   cursor: default;
 }
 
-/* Couleur originale au survol */
 .clients__logo:hover {
-  filter: grayscale(0%) brightness(1);
-  opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.12);
 }
 
-/* Animation droite → gauche */
-@keyframes marquee-logos {
+/* ══════════════════════════════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════════════════════════════ */
+@keyframes marquee-ltr {
   0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  /* Avec 4 groupes, la largeur d'un groupe représente 25% du conteneur total */
+  100% { transform: translateX(-25%); }
 }
 
-/* Respect de la préférence de mouvement réduit */
+/* ══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITÉ
+══════════════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .clients__track {
     animation: none;

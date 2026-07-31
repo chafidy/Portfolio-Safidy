@@ -73,6 +73,28 @@ export function init() {
   let isFirstOpen = true;
   let isBotTyping = false;
 
+  // --- Masquer le chatbot dans la hero section ---
+  const heroSection = document.getElementById('hero');
+  if (heroSection) {
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // La hero est visible → masquer le chatbot
+          chatbot.classList.add('chatbot--hidden');
+          // Si la fenêtre est ouverte, la fermer proprement
+          if (chatbot.classList.contains('is-open')) {
+            chatbot.classList.remove('is-open');
+          }
+        } else {
+          // On a quitté la hero → afficher le chatbot
+          chatbot.classList.remove('chatbot--hidden');
+        }
+      },
+      { threshold: 0.15 }
+    );
+    heroObserver.observe(heroSection);
+  }
+
   trigger.addEventListener('click', () => {
     chatbot.classList.add('is-open');
     if (isFirstOpen) {
