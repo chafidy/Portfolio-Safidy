@@ -824,7 +824,8 @@
           </div>
         </div>
 
-        <form class="form" id="contact-form">
+        <form class="form" id="contact-form" name="contact" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="contact">
           <div class="form__field">
             <label class="form__label" for="contact-name">Nom</label>
             <input class="form__input" type="text" id="contact-name" name="name" autocomplete="name" required>

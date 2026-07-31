@@ -1,16 +1,9 @@
 /**
  * FICHIER : form.js
- * RÔLE    : Validation temps réel du formulaire de contact.
- *           À la soumission, construit un lien mailto: avec tous les champs
- *           et ouvre le client mail du visiteur (Gmail, Outlook, etc.).
- *           Zéro dépendance externe — fonctionne entièrement côté navigateur.
+ * RÔLE    : Validation temps réel du formulaire de contact et soumission
+ *           asynchrone vers Netlify Forms (avec data-netlify="true").
+ *           Sans JS, le formulaire fonctionne nativement via HTML/Netlify POST.
  */
-
-/* ══════════════════════════════════════════════════════════════════
-   ADRESSE DE RÉCEPTION
-   ← Mettez ici votre adresse email
-══════════════════════════════════════════════════════════════════ */
-const RECIPIENT_EMAIL = 'jraharijesy@gmail.com';
 
 /* ══════════════════════════════════════════════════════════════════
    SÉLECTEURS
@@ -19,7 +12,6 @@ const form         = document.getElementById('contact-form');
 const nameInput    = document.getElementById('contact-name');
 const emailInput   = document.getElementById('contact-email');
 const typeSelect   = document.getElementById('contact-type');
-const budgetInput  = document.getElementById('contact-budget');
 const messageInput = document.getElementById('contact-message');
 const submitButton = form?.querySelector('.form__submit');
 const statusEl     = document.getElementById('form-status');
@@ -70,15 +62,15 @@ function setStatus(message, tone) {
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   ENVOI VIA MAILTO
+   SOUMISSION NETLIFY FORMS (AJAX)
 ══════════════════════════════════════════════════════════════════ */
 function handleSubmit(event) {
   event.preventDefault();
 
   // Validation côté client
-  const inputs           = [...fieldValidators.keys()];
-  const results          = inputs.map((input) => validateSingle(input));
-  const firstInvalidIdx  = results.indexOf(false);
+  const inputs          = [...fieldValidators.keys()];
+  const results         = inputs.map((input) => validateSingle(input));
+  const firstInvalidIdx = results.indexOf(false);
 
   if (firstInvalidIdx !== -1) {
     inputs[firstInvalidIdx].focus();
@@ -86,31 +78,39 @@ function handleSubmit(event) {
     return;
   }
 
-  // Récupération des valeurs
-  const name    = nameInput.value.trim();
-  const email   = emailInput.value.trim();
-  const type    = typeSelect.value;
-  const budget  = budgetInput?.value.trim() || 'Non précisé';
-  const message = messageInput.value.trim();
+  // Bouton en état "Chargement"
+  submitButton.disabled = true;
+  submitButton.textContent = 'Envoi en cours…';
+  setStatus('', null);
 
-  // Construction du sujet et du corps de l'email
-  const subject = `Demande de devis — ${type} — ${name}`;
-  const body = [
-    `Nom : ${name}`,
-    `Email : ${email}`,
-    `Type de projet : ${type}`,
-    `Budget indicatif : ${budget}`,
-    ``,
-    `Message :`,
-    message,
-  ].join('\n');
+  // Envoi asynchrone vers Netlify Forms (aucun rechargement de page)
+  const formData = new FormData(form);
 
-  // Construction du lien mailto et ouverture du client mail
-  const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailtoLink;
-
-  // Confirmation visuelle
-  setStatus('✅ Votre client mail va s\'ouvrir pour envoyer le message.', 'success');
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(formData).toString(),
+  })
+    .then((response) => {
+      if (response.ok) {
+        form.reset();
+        inputs.forEach((input) => {
+          input.closest('.form__field')?.classList.remove('form__field--error');
+          input.removeAttribute('aria-invalid');
+        });
+        submitButton.disabled = false;
+        submitButton.textContent = 'Envoyer le message';
+        setStatus('✅ Message envoyé avec succès ! Je vous réponds sous 24 h.', 'success');
+      } else {
+        throw new Error('Erreur réseau Netlify');
+      }
+    })
+    .catch((error) => {
+      console.error('Netlify Form Submit Error:', error);
+      submitButton.disabled = false;
+      submitButton.textContent = 'Envoyer le message';
+      setStatus('❌ Une erreur est survenue lors de l\'envoi. Veuillez réessayer.', 'error');
+    });
 }
 
 /* ══════════════════════════════════════════════════════════════════
