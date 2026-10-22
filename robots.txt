@@ -1,6 +1,8 @@
 # Robots.txt for safidyraharijesy.netlify.app - Safidy Raharijesy Portfolio
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /admin/
 
 # Explicit access for AI scrapers and Search Engines
 User-agent: GPTBot

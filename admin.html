@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backoffice — Safidy R.</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="admin/admin.css">
+</head>
+
+<body class="admin">
+
+  <!-- ============ CONNEXION ============ -->
+  <section class="admin-login" id="view-login" hidden>
+    <form class="admin-card admin-login__card form" id="login-form">
+      <div>
+        <span class="eyebrow">Backoffice</span>
+        <h1 class="admin-login__title">Connexion</h1>
+      </div>
+      <div>
+        <label class="form__label" for="login-email">Email</label>
+        <input class="form__input" id="login-email" type="email" autocomplete="username" required>
+      </div>
+      <div>
+        <label class="form__label" for="login-password">Mot de passe</label>
+        <input class="form__input" id="login-password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn--primary" type="submit">Se connecter</button>
+      <p class="admin-msg" id="login-msg" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- ============ APPLICATION ============ -->
+  <div class="admin-app" id="view-app" hidden>
+    <header class="admin-bar">
+      <div class="container admin-bar__inner">
+        <a class="header__logo" href="index.html" target="_blank" rel="noopener">Safidy R. <span class="admin-bar__badge">admin</span></a>
+        <nav class="admin-tabs" aria-label="Sections du backoffice">
+          <button class="filter-pill filter-pill--active" type="button" data-tab="projects" aria-pressed="true">Projets</button>
+          <button class="filter-pill" type="button" data-tab="posts" aria-pressed="false">Blog</button>
+        </nav>
+        <div class="admin-bar__actions">
+          <button class="btn btn--primary admin-publish" id="publish-btn" type="button">
+            Publier sur le site <span class="admin-publish__count" id="pending-count" hidden></span>
+          </button>
+          <button class="btn btn--ghost" id="logout-btn" type="button">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container admin-main">
+      <p class="admin-msg admin-msg--banner" id="app-msg" role="status" hidden></p>
+
+      <!-- Projets -->
+      <section id="tab-projects" aria-labelledby="projects-heading">
+        <div class="admin-toolbar">
+          <h1 id="projects-heading" class="admin-toolbar__title">Projets <span class="admin-count" id="projects-count"></span></h1>
+          <input class="form__input admin-toolbar__search" id="projects-search" type="search" placeholder="Rechercher un projet…" aria-label="Rechercher un projet">
+          <select class="form__select admin-toolbar__filter" id="projects-filter" aria-label="Filtrer par catégorie"></select>
+          <button class="btn btn--primary" id="project-new" type="button">+ Nouveau projet</button>
+        </div>
+        <ul class="admin-list" id="projects-list"></ul>
+      </section>
+
+      <!-- Blog -->
+      <section id="tab-posts" aria-labelledby="posts-heading" hidden>
+        <div class="admin-toolbar">
+          <h1 id="posts-heading" class="admin-toolbar__title">Articles <span class="admin-count" id="posts-count"></span></h1>
+          <button class="btn btn--primary" id="post-new" type="button">+ Nouvel article</button>
+        </div>
+        <ul class="admin-list" id="posts-list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ ÉDITEUR DE PROJET ============ -->
+  <dialog class="admin-dialog" id="project-dialog" aria-labelledby="project-dialog-title">
+    <form class="form admin-dialog__form" id="project-form" method="dialog">
+      <header class="admin-dialog__header">
+        <h2 id="project-dialog-title">Projet</h2>
+        <button class="admin-dialog__close" type="button" data-close aria-label="Fermer">×</button>
+      </header>
+
+      <div class="admin-dialog__body admin-grid">
+        <div class="admin-grid__media">
+          <span class="form__label">Image</span>
+          <label class="admin-drop" for="project-image">
+            <img class="admin-drop__preview" id="project-image-preview" alt="" hidden>
+            <span class="admin-drop__hint" id="project-image-hint">Cliquez ou déposez une image<br><small>convertie en WebP automatiquement</small></span>
+          </label>
+          <input class="sr-only" id="project-image" type="file" accept="image/*">
+          <label class="form__label admin-mt" for="project-alt">Texte alternatif <span class="form__optional">(SEO &amp; accessibilité)</span></label>
+          <input class="form__input" id="project-alt" type="text" maxlength="200" placeholder="Décrivez ce que montre l'image">
+        </div>
+
+        <div class="admin-grid__fields">
+          <div>
+            <label class="form__label" for="project-title">Titre</label>
+            <input class="form__input" id="project-title" type="text" required maxlength="160">
+          </div>
+          <div>
+            <label class="form__label" for="project-category">Catégorie</label>
+            <select class="form__select" id="project-category" required></select>
+          </div>
+          <div>
+            <label class="form__label" for="project-description">Description</label>
+            <textarea class="form__textarea" id="project-description" rows="4" maxlength="600"></textarea>
+          </div>
+          <div>
+            <span class="form__label">Tags</span>
+            <ul class="admin-tags" id="project-tags"></ul>
+            <button class="btn btn--ghost admin-tags__add" id="project-tag-add" type="button">+ Ajouter un tag</button>
+          </div>
+          <label class="admin-switch">
+            <input id="project-published" type="checkbox" checked>
+            <span>Publié sur le site</span>
+          </label>
+        </div>
+      </div>
+
+      <footer class="admin-dialog__footer">
+        <button class="btn btn--ghost admin-danger" id="project-delete" type="button">Supprimer</button>
+        <p class="admin-msg" id="project-msg" role="alert"></p>
+        <button class="btn btn--secondary" type="button" data-close>Annuler</button>
+        <button class="btn btn--primary" type="submit">Enregistrer</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- ============ ÉDITEUR D'ARTICLE ============ -->
+  <dialog class="admin-dialog admin-dialog--wide" id="post-dialog" aria-labelledby="post-dialog-title">
+    <form class="form admin-dialog__form" id="post-form" method="dialog">
+      <header class="admin-dialog__header">
+        <h2 id="post-dialog-title">Article</h2>
+        <button class="admin-dialog__close" type="button" data-close aria-label="Fermer">×</button>
+      </header>
+
+      <div class="admin-dialog__body admin-post">
+        <div class="admin-post__main">
+          <div>
+            <label class="form__label" for="post-title">Titre</label>
+            <input class="form__input admin-post__title" id="post-title" type="text" required maxlength="160">
+          </div>
+          <div class="admin-editor-wrap">
+            <span class="form__label">Contenu</span>
+            <div class="admin-editor" id="post-editor"></div>
+          </div>
+        </div>
+
+        <aside class="admin-post__side">
+          <label class="admin-switch">
+            <input id="post-published" type="checkbox">
+            <span>Publié</span>
+          </label>
+          <div>
+            <label class="form__label" for="post-date">Date de publication</label>
+            <input class="form__input" id="post-date" type="datetime-local">
+            <p class="form__hint">Remplie automatiquement à la première publication.</p>
+          </div>
+          <div>
+            <label class="form__label" for="post-slug">Adresse (slug)</label>
+            <input class="form__input" id="post-slug" type="text" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxlength="90">
+            <p class="form__hint" id="post-slug-hint"></p>
+          </div>
+          <div>
+            <label class="form__label" for="post-excerpt">Résumé <span class="form__optional">(Google &amp; réseaux sociaux)</span></label>
+            <textarea class="form__textarea" id="post-excerpt" rows="3" maxlength="300"></textarea>
+            <p class="form__hint" id="post-excerpt-hint"></p>
+          </div>
+          <div>
+            <span class="form__label">Image de couverture</span>
+            <label class="admin-drop admin-drop--wide" for="post-cover">
+              <img class="admin-drop__preview" id="post-cover-preview" alt="" hidden>
+              <span class="admin-drop__hint" id="post-cover-hint">Cliquez ou déposez une image</span>
+            </label>
+            <input class="sr-only" id="post-cover" type="file" accept="image/*">
+            <input class="form__input admin-mt" id="post-cover-alt" type="text" maxlength="200" placeholder="Texte alternatif de la couverture" aria-label="Texte alternatif de la couverture">
+          </div>
+          <div>
+            <label class="form__label" for="post-tags">Tags <span class="form__optional">(séparés par des virgules)</span></label>
+            <input class="form__input" id="post-tags" type="text" placeholder="UI/UX, Branding">
+          </div>
+        </aside>
+      </div>
+
+      <footer class="admin-dialog__footer">
+        <button class="btn btn--ghost admin-danger" id="post-delete" type="button">Supprimer</button>
+        <p class="admin-msg" id="post-msg" role="alert"></p>
+        <button class="btn btn--secondary" type="button" data-close>Annuler</button>
+        <button class="btn btn--primary" type="submit">Enregistrer</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <script type="module" src="admin/admin.js"></script>
+</body>
+
+</html>

@@ -21,4 +21,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+  <!-- build:blog -->
+  <url>
+    <loc>https://safidyraharijesy.netlify.app/blog.html</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- /build:blog -->
 </urlset>

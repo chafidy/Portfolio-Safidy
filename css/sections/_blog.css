@@ -1,0 +1,271 @@
+/**
+ * FICHIER : _blog.css
+ * RÔLE    : Liste des articles (blog.html), page article (blog/<slug>.html)
+ *           et mise en forme du contenu riche produit par l'éditeur du
+ *           backoffice (Quill) — classes .ql-* incluses.
+ * DÉPEND  : _tokens.css, _grid.css, _tags.css, _buttons.css
+ *
+ * TABLE DES MATIÈRES
+ *   1. Liste des articles
+ *   2. Page article
+ *   3. Contenu riche (.prose)
+ */
+
+/* 1. Liste des articles */
+.blog__empty {
+  margin-top: var(--sp-6);
+  padding: var(--sp-6) var(--sp-4);
+  text-align: center;
+  color: var(--clay-ink-soft);
+  background: var(--clay-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-clay-md);
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+
+@media (min-width: 640px) {
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .post-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.post-card > article {
+  height: 100%;
+  background: var(--clay-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-clay-md);
+  transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
+}
+
+.post-card > article:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-clay-lg);
+}
+
+.post-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-card__link:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+  border-radius: var(--radius-lg);
+}
+
+.post-card__cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  object-fit: cover;
+}
+
+.post-card__cover--empty {
+  background: linear-gradient(135deg, var(--clay-purple-100), var(--tag-honey-bg));
+}
+
+.post-card__body {
+  padding: var(--sp-3);
+}
+
+.post-card__meta,
+.article__meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--clay-ink-soft);
+}
+
+.post-card__title {
+  margin-top: var(--sp-1);
+  font-size: var(--text-xl);
+}
+
+.post-card__excerpt {
+  margin-top: var(--sp-1);
+  color: var(--clay-ink-soft);
+}
+
+/* 2. Page article (un <article> direct du <main>, hors rythme main>section) */
+.article {
+  padding-block: var(--sp-8) var(--sp-10);
+}
+
+@media (min-width: 900px) {
+  .article {
+    padding-block: var(--sp-10) var(--sp-12);
+  }
+}
+
+.article__inner {
+  max-width: 780px;
+}
+
+.article__breadcrumb {
+  display: flex;
+  gap: var(--sp-1);
+  color: var(--clay-ink-soft);
+}
+
+.article__breadcrumb a {
+  color: inherit;
+}
+
+.article__header {
+  margin-top: var(--sp-3);
+}
+
+.article__title {
+  margin-top: var(--sp-1);
+}
+
+.article__lead {
+  margin-top: var(--sp-2);
+}
+
+.article__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin-top: var(--sp-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-clay-md);
+}
+
+.article__content {
+  margin-top: var(--sp-5);
+}
+
+.article__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-4);
+  border-top: 2px solid var(--clay-purple-100);
+}
+
+/* 3. Contenu riche (.prose) */
+.prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: var(--sp-2);
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-top: var(--sp-5);
+}
+
+.prose h2 { font-size: var(--text-2xl); }
+.prose h3 { font-size: var(--text-xl); }
+.prose h4 { font-size: var(--text-lg); }
+
+.prose a {
+  color: var(--clay-purple-600);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--sp-3);
+}
+
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+
+.prose li + li {
+  margin-top: 6px;
+}
+
+.prose blockquote {
+  padding: var(--sp-2) var(--sp-3);
+  font-style: italic;
+  background: var(--clay-white);
+  border-left: 5px solid var(--clay-purple-500);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  box-shadow: var(--shadow-clay-sm);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border-radius: var(--radius-md);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: .9em;
+  padding: 2px 6px;
+  background: var(--clay-purple-100);
+  border-radius: 6px;
+}
+
+.prose pre {
+  padding: var(--sp-2) var(--sp-3);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--clay-white);
+  background: var(--clay-ink);
+  border-radius: var(--radius-md);
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 2px solid var(--clay-purple-100);
+  margin-block: var(--sp-5);
+}
+
+.prose iframe,
+.prose .ql-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  border-radius: var(--radius-md);
+}
+
+/* Alignements et retraits produits par Quill */
+.prose .ql-align-center { text-align: center; }
+.prose .ql-align-right { text-align: right; }
+.prose .ql-align-justify { text-align: justify; }
+.prose .ql-indent-1 { padding-left: 2em; }
+.prose .ql-indent-2 { padding-left: 4em; }
+.prose .ql-indent-3 { padding-left: 6em; }
+.prose .ql-size-small { font-size: .85em; }
+.prose .ql-size-large { font-size: 1.35em; }
+.prose .ql-size-huge { font-size: 1.8em; }

@@ -1,0 +1,20 @@
+# Build : génère dist/ depuis Supabase (projets, blog, sitemap)
+[build]
+  command = "node scripts/build.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Backoffice : jamais indexé, jamais mis en cache
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache"
