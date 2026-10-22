@@ -152,7 +152,7 @@
 
 .hero__avatar {
   width: 100%;
-  max-width: 360px;
+  max-width: 500px;
   height: auto;
   filter: drop-shadow(var(--shadow-float));
 }
