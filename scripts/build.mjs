@@ -2,6 +2,7 @@
  * FICHIER : build.mjs
  * RÔLE    : Génère le site statique dans dist/ à partir des contenus Supabase
  *           (exécuté par Netlify à chaque déploiement, cf. netlify.toml).
+ *             - index.html   : les 6 projets « À la une »
  *             - projets.html : grille des projets publiés
  *             - blog.html    : liste des articles publiés
  *             - blog/<slug>.html : une page par article (SEO complet)
@@ -14,7 +15,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SUPABASE_URL, SUPABASE_ANON_KEY, SITE_URL } from '../admin/config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, SITE_URL, CATEGORIES } from '../admin/config.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const DIST = join(ROOT, 'dist');
@@ -90,6 +91,16 @@ const renderProject = (p) => `          <li class="project-card" data-category="
               </div>
             </article>
           </li>`;
+
+// Pilules de filtre de l'accueil : uniquement les catégories des projets à la une
+function renderFilters(projects) {
+  const present = new Set(projects.map((p) => p.category));
+  const pills = Object.entries(CATEGORIES)
+    .filter(([value]) => present.has(value))
+    .map(([value, label]) => `          <button class="filter-pill" type="button" data-filter="${value}" aria-pressed="false">${escapeHtml(label)}</button>`);
+  return [`          <button class="filter-pill filter-pill--active" type="button" data-filter="all"
+            aria-pressed="true">Tous</button>`, ...pills].join('\n');
+}
 
 const renderPostCard = (post) => `          <li class="post-card">
             <article>
@@ -252,6 +263,18 @@ async function main() {
   projetsHtml = replaceBlock(projetsHtml, 'projects', projects.map(renderProject).join('\n'), 'projets.html');
   await writeFile(projetsFile, projetsHtml);
 
+  // index.html : section « Projets récents » (6 projets à la une au maximum)
+  const featured = projects.filter((p) => p.featured).slice(0, 6);
+  if (featured.length) {
+    const indexFile = join(DIST, 'index.html');
+    let indexHtml = await readFile(indexFile, 'utf8');
+    indexHtml = replaceBlock(indexHtml, 'featured', featured.map(renderProject).join('\n'), 'index.html');
+    indexHtml = replaceBlock(indexHtml, 'featured-filters', renderFilters(featured), 'index.html');
+    await writeFile(indexFile, indexHtml);
+  } else {
+    console.warn('Aucun projet à la une : la section de l\'accueil garde son contenu actuel.');
+  }
+
   // blog.html
   const blogFile = join(DIST, 'blog.html');
   let blogHtml = await readFile(blogFile, 'utf8');
@@ -279,7 +302,7 @@ ${posts.map(renderPostCard).join('\n')}
   sitemap = replaceBlock(sitemap, 'blog', blogUrls.join('\n'), 'sitemap.xml');
   await writeFile(sitemapFile, sitemap);
 
-  console.log(`dist/ généré : projets.html, blog.html, ${posts.length} article(s), sitemap.xml`);
+  console.log(`dist/ généré : index.html (${featured.length} à la une), projets.html, blog.html, ${posts.length} article(s), sitemap.xml`);
 }
 
 main().catch((error) => {

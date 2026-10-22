@@ -14,6 +14,7 @@ import { init as initForm } from './modules/form.js';
 import { init as initTheme } from './modules/theme.js';
 import { init as initLightbox } from './modules/lightbox.js';
 import { init as initChatbot } from './modules/chatbot.js';
+import { init as initAnalytics } from './modules/analytics.js';
 
 document.documentElement.classList.add('has-js');
 
@@ -25,3 +26,4 @@ initForm();
 initTheme();
 initLightbox();
 initChatbot();
+initAnalytics();

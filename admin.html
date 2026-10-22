@@ -48,6 +48,7 @@
         <nav class="admin-tabs" aria-label="Sections du backoffice">
           <button class="filter-pill filter-pill--active" type="button" data-tab="projects" aria-pressed="true">Projets</button>
           <button class="filter-pill" type="button" data-tab="posts" aria-pressed="false">Blog</button>
+          <button class="filter-pill" type="button" data-tab="stats" aria-pressed="false">Statistiques</button>
         </nav>
         <div class="admin-bar__actions">
           <button class="btn btn--primary admin-publish" id="publish-btn" type="button">
@@ -65,6 +66,7 @@
       <section id="tab-projects" aria-labelledby="projects-heading">
         <div class="admin-toolbar">
           <h1 id="projects-heading" class="admin-toolbar__title">Projets <span class="admin-count" id="projects-count"></span></h1>
+          <span class="admin-featured-count" id="featured-count" title="Projets affichés sur la page d'accueil"></span>
           <input class="form__input admin-toolbar__search" id="projects-search" type="search" placeholder="Rechercher un projet…" aria-label="Rechercher un projet">
           <select class="form__select admin-toolbar__filter" id="projects-filter" aria-label="Filtrer par catégorie"></select>
           <button class="btn btn--primary" id="project-new" type="button">+ Nouveau projet</button>
@@ -79,6 +81,48 @@
           <button class="btn btn--primary" id="post-new" type="button">+ Nouvel article</button>
         </div>
         <ul class="admin-list" id="posts-list"></ul>
+      </section>
+
+      <!-- Statistiques -->
+      <section id="tab-stats" aria-labelledby="stats-heading" hidden>
+        <div class="admin-toolbar">
+          <h1 id="stats-heading" class="admin-toolbar__title">Statistiques</h1>
+          <div class="admin-tabs" role="group" aria-label="Période">
+            <button class="filter-pill" type="button" data-days="7" aria-pressed="false">7 jours</button>
+            <button class="filter-pill filter-pill--active" type="button" data-days="30" aria-pressed="true">30 jours</button>
+            <button class="filter-pill" type="button" data-days="90" aria-pressed="false">90 jours</button>
+          </div>
+        </div>
+
+        <div class="stats" id="stats">
+          <div class="stats-kpis">
+            <div class="admin-card stats-kpi"><p class="stats-kpi__label">Pages vues</p><p class="stats-kpi__value" id="kpi-views">–</p></div>
+            <div class="admin-card stats-kpi"><p class="stats-kpi__label">Visiteurs uniques</p><p class="stats-kpi__value" id="kpi-visitors">–</p></div>
+            <div class="admin-card stats-kpi"><p class="stats-kpi__label">Pays</p><p class="stats-kpi__value" id="kpi-countries">–</p></div>
+          </div>
+
+          <div class="admin-card stats-card">
+            <h2 class="stats-card__title">Pages vues par jour</h2>
+            <div class="stats-chart" id="stats-chart"></div>
+            <details class="stats-table">
+              <summary>Voir les données en tableau</summary>
+              <table>
+                <thead><tr><th scope="col">Jour</th><th scope="col">Pages vues</th><th scope="col">Visiteurs</th></tr></thead>
+                <tbody id="stats-table-body"></tbody>
+              </table>
+            </details>
+          </div>
+
+          <div class="stats-grid">
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Pays <small>(visiteurs)</small></h2><ol class="stats-top" id="top-countries"></ol></div>
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Villes <small>(visiteurs)</small></h2><ol class="stats-top" id="top-cities"></ol></div>
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Pages les plus vues</h2><ol class="stats-top" id="top-pages"></ol></div>
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Sources de trafic</h2><ol class="stats-top" id="top-sources"></ol></div>
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Appareils <small>(visiteurs)</small></h2><ol class="stats-top" id="top-devices"></ol></div>
+            <div class="admin-card stats-card"><h2 class="stats-card__title">Navigateurs <small>(visiteurs)</small></h2><ol class="stats-top" id="top-browsers"></ol></div>
+          </div>
+          <p class="form__hint">Mesure sans cookie : aucune IP n'est conservée. Tes propres visites depuis ce navigateur ne sont pas comptées.</p>
+        </div>
       </section>
     </main>
   </div>
@@ -125,6 +169,13 @@
             <input id="project-published" type="checkbox" checked>
             <span>Publié sur le site</span>
           </label>
+          <div>
+            <label class="admin-switch">
+              <input id="project-featured" type="checkbox">
+              <span>★ À la une sur la page d'accueil</span>
+            </label>
+            <p class="form__hint" id="project-featured-hint"></p>
+          </div>
         </div>
       </div>
 

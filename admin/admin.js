@@ -13,7 +13,8 @@
  *   4. Projets
  *   5. Articles
  *   6. Publication sur le site
- *   7. Démarrage
+ *   7. Statistiques
+ *   8. Démarrage
  */
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
@@ -151,6 +152,7 @@ async function showApp(session) {
   }
   $('#view-login').hidden = true;
   $('#view-app').hidden = false;
+  storageSet('analytics.ignore', '1'); // tes propres visites ne faussent pas les statistiques
   renderPending();
   await Promise.all([loadProjects(), loadPosts()]);
 }
@@ -195,6 +197,7 @@ const projectForm = {
   description: $('#project-description'),
   alt: $('#project-alt'),
   published: $('#project-published'),
+  featured: $('#project-featured'),
   image: $('#project-image'),
   preview: $('#project-image-preview'),
   hint: $('#project-image-hint'),
@@ -206,7 +209,11 @@ const projectForm = {
 const categoryOptions = Object.entries(CATEGORIES)
   .map(([value, label]) => `<option value="${value}">${escapeHtml(label)}</option>`).join('');
 projectForm.category.innerHTML = categoryOptions;
-$('#projects-filter').innerHTML = `<option value="">Toutes les catégories</option>${categoryOptions}`;
+$('#projects-filter').innerHTML = `<option value="">Toutes les catégories</option>
+  <option value="__featured">★ À la une (accueil)</option>${categoryOptions}`;
+
+const FEATURED_MAX = 6;
+const featuredCount = () => state.projects.filter((p) => p.featured).length;
 setupDropZone(projectForm.image, projectForm.preview, projectForm.hint);
 
 async function loadProjects() {
@@ -222,10 +229,11 @@ function renderProjects() {
   const category = $('#projects-filter').value;
   const filtering = Boolean(query || category);
   const visible = state.projects.filter((p) =>
-    (!category || p.category === category)
+    (!category || (category === '__featured' ? p.featured : p.category === category))
     && (!query || `${p.title} ${p.description}`.toLowerCase().includes(query)));
 
   $('#projects-count').textContent = `(${visible.length}${filtering ? ` / ${state.projects.length}` : ''})`;
+  $('#featured-count').textContent = `★ À la une : ${featuredCount()} / ${FEATURED_MAX}`;
   $('#projects-list').innerHTML = visible.length ? visible.map((p) => {
     const index = state.projects.indexOf(p);
     return `<li class="admin-row${p.published ? '' : ' admin-row--draft'}" data-id="${p.id}">
@@ -239,6 +247,8 @@ function renderProjects() {
         </p>
       </div>
       <div class="admin-row__actions">
+        <button class="admin-icon-btn admin-star${p.featured ? ' admin-star--on' : ''}" type="button" data-action="feature"
+          aria-pressed="${p.featured}" aria-label="À la une sur l'accueil" title="${p.featured ? 'Retirer de' : 'Mettre sur'} la page d'accueil">${p.featured ? '★' : '☆'}</button>
         <button class="admin-icon-btn" type="button" data-action="up" aria-label="Monter" ${filtering || index === 0 ? 'disabled' : ''}>↑</button>
         <button class="admin-icon-btn" type="button" data-action="down" aria-label="Descendre" ${filtering || index === state.projects.length - 1 ? 'disabled' : ''}>↓</button>
         <button class="admin-icon-btn" type="button" data-action="edit">Modifier</button>
@@ -257,6 +267,18 @@ $('#projects-list').addEventListener('click', async (event) => {
   const action = button.dataset.action;
 
   if (action === 'edit') return openProject(project);
+
+  if (action === 'feature') {
+    if (!project.featured && featuredCount() >= FEATURED_MAX) {
+      return appMessage(`Déjà ${FEATURED_MAX} projets à la une : retirez-en un avant d'en ajouter un autre.`, 'error');
+    }
+    const { error } = await supabase.from('projects').update({ featured: !project.featured }).eq('id', project.id);
+    if (error) return appMessage(error.message, 'error');
+    project.featured = !project.featured;
+    if (project.featured && !project.published) appMessage('Ce projet est en brouillon : publiez-le pour qu\'il apparaisse sur l\'accueil.');
+    markPending();
+    return renderProjects();
+  }
 
   if (action === 'toggle') {
     const { error } = await supabase.from('projects').update({ published: !project.published }).eq('id', project.id);
@@ -308,6 +330,12 @@ function openProject(project = null) {
   projectForm.description.value = project?.description ?? '';
   projectForm.alt.value = project?.image_alt ?? '';
   projectForm.published.checked = project?.published ?? true;
+  projectForm.featured.checked = project?.featured ?? false;
+  const othersFeatured = featuredCount() - (project?.featured ? 1 : 0);
+  projectForm.featured.disabled = !project?.featured && othersFeatured >= FEATURED_MAX;
+  $('#project-featured-hint').textContent = projectForm.featured.disabled
+    ? `Déjà ${FEATURED_MAX} projets à la une : retirez-en un depuis la liste (★).`
+    : `${othersFeatured} / ${FEATURED_MAX} déjà à la une. L'ordre suit celui de la liste.`;
   projectForm.tags.innerHTML = '';
   (project?.tags?.length ? project.tags : [{ label: '', color: 'purple' }]).forEach(addTagRow);
   resetDropZone(projectForm.image, projectForm.preview, projectForm.hint, project?.image_url);
@@ -332,6 +360,7 @@ $('#project-form').addEventListener('submit', async (event) => {
       description: projectForm.description.value.trim(),
       image_alt: projectForm.alt.value.trim() || projectForm.title.value.trim(),
       published: projectForm.published.checked,
+      featured: projectForm.featured.checked,
       tags: [...projectForm.tags.querySelectorAll('.admin-tag-row')]
         .map((row) => ({ label: row.querySelector('input').value.trim(), color: row.querySelector('select').value }))
         .filter((tag) => tag.label),
@@ -596,6 +625,188 @@ $('#publish-btn').addEventListener('click', async () => {
   appMessage('Publication lancée ! Le site sera à jour dans 1 à 2 minutes.', 'success');
 });
 
-/* 7. Démarrage */
+/* 7. Statistiques */
+const stats = { days: 30, loaded: false };
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const numberFr = new Intl.NumberFormat('fr-FR');
+const dayFr = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const dayLongFr = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+
+// Drapeau en image (les emojis drapeaux ne s'affichent pas sous Windows)
+function flagImage(code) {
+  if (!/^[A-Z]{2}$/.test(code || '')) return null;
+  const img = document.createElement('img');
+  img.className = 'stats-top__flag';
+  img.src = `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
+  img.alt = '';
+  img.width = 20;
+  img.height = 15;
+  img.loading = 'lazy';
+  return img;
+}
+
+function svgEl(name, attrs) {
+  const el = document.createElementNS(SVG_NS, name);
+  Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+  return el;
+}
+
+// Barre arrondie en haut (4px), posée à plat sur la ligne de base
+function barPath(x, y, w, h) {
+  const r = Math.min(4, w / 2, h);
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+
+function renderDailyChart(daily) {
+  const container = $('#stats-chart');
+  container.replaceChildren();
+  const width = container.clientWidth || 800;
+  const height = 240;
+  const pad = { top: 12, right: 8, bottom: 26, left: 36 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const max = Math.max(1, ...daily.map((d) => d.views));
+  const step = Math.max(1, Math.ceil(max / 4));
+  const top = step * Math.ceil(max / step);
+  const slot = plotW / daily.length;
+  const gap = Math.min(2, slot * 0.2);
+  const y = (v) => pad.top + plotH - (v / top) * plotH;
+
+  const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}`, role: 'img',
+    'aria-label': `Pages vues par jour sur ${daily.length} jours (détail dans le tableau)` });
+
+  for (let v = 0; v <= top; v += step) {
+    svg.append(svgEl('line', { class: 'stats-chart__grid', x1: pad.left, x2: width - pad.right, y1: y(v), y2: y(v) }));
+    const label = svgEl('text', { class: 'stats-chart__axis', x: pad.left - 8, y: y(v) + 4, 'text-anchor': 'end' });
+    label.textContent = numberFr.format(v);
+    svg.append(label);
+  }
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'stats-tooltip';
+  tooltip.hidden = true;
+  const labelEvery = Math.ceil(daily.length / 7);
+
+  daily.forEach((d, i) => {
+    const x = pad.left + i * slot;
+    const date = new Date(`${d.day}T00:00:00Z`);
+    const hit = svgEl('rect', { class: 'stats-chart__hit', x, y: pad.top, width: slot, height: plotH });
+    const barH = (d.views / top) * plotH;
+    const bar = svgEl('path', { class: 'stats-chart__bar', d: barH > 0 ? barPath(x + gap / 2, y(d.views), slot - gap, barH) : '' });
+    hit.addEventListener('pointerenter', () => {
+      bar.classList.add('stats-chart__bar--active');
+      tooltip.replaceChildren();
+      const strong = document.createElement('strong');
+      strong.textContent = `${numberFr.format(d.views)} page${d.views > 1 ? 's' : ''} vue${d.views > 1 ? 's' : ''}`;
+      tooltip.append(strong, `${numberFr.format(d.visitors)} visiteur${d.visitors > 1 ? 's' : ''} · ${dayLongFr.format(date)}`);
+      tooltip.style.left = `${((x + slot / 2) / width) * 100}%`;
+      tooltip.style.top = `${(Math.min(y(d.views), pad.top + plotH - 4) / height) * 240}px`;
+      tooltip.hidden = false;
+    });
+    hit.addEventListener('pointerleave', () => {
+      bar.classList.remove('stats-chart__bar--active');
+      tooltip.hidden = true;
+    });
+    svg.append(hit, bar);
+
+    if (i % labelEvery === 0 || i === daily.length - 1) {
+      const label = svgEl('text', { class: 'stats-chart__axis', x: x + slot / 2, y: height - 6, 'text-anchor': 'middle' });
+      label.textContent = dayFr.format(date);
+      svg.append(label);
+    }
+  });
+
+  container.append(svg, tooltip);
+
+  $('#stats-table-body').replaceChildren(...[...daily].reverse().map((d) => {
+    const row = document.createElement('tr');
+    [dayLongFr.format(new Date(`${d.day}T00:00:00Z`)), numberFr.format(d.views), numberFr.format(d.visitors)]
+      .forEach((text) => { const td = document.createElement('td'); td.textContent = text; row.append(td); });
+    return row;
+  }));
+}
+
+const DEVICE_ICONS = { mobile: '📱', tablette: '📲', ordinateur: '💻' };
+
+// Libellé affiché + code pays éventuel (pour le drapeau)
+function topLabel(key, label) {
+  if (key === 'countries') { const [code, name] = label.split('|'); return { text: name, code }; }
+  if (key === 'cities') { const [city, code] = label.split('|'); return { text: city, code }; }
+  if (key === 'devices') return { text: `${DEVICE_ICONS[label] || '❔'} ${label}` };
+  return { text: label };
+}
+
+function renderTop(key, items = []) {
+  const list = $(`#top-${key}`);
+  if (!items.length) {
+    const empty = document.createElement('li');
+    empty.className = 'stats-top__empty';
+    empty.textContent = 'Pas encore de données sur cette période.';
+    return list.replaceChildren(empty);
+  }
+  const max = items[0].n;
+  list.replaceChildren(...items.map((item) => {
+    const li = document.createElement('li');
+    li.className = 'stats-top__row';
+    const label = document.createElement('span');
+    label.className = 'stats-top__label';
+    const { text, code } = topLabel(key, item.label);
+    const flag = flagImage(code);
+    if (flag) label.append(flag);
+    label.append(text);
+    label.title = text;
+    const value = document.createElement('span');
+    value.className = 'stats-top__value';
+    value.textContent = numberFr.format(item.n);
+    const track = document.createElement('span');
+    track.className = 'stats-top__track';
+    const fill = document.createElement('span');
+    fill.className = 'stats-top__fill';
+    fill.style.width = `${Math.max(2, (item.n / max) * 100)}%`;
+    track.append(fill);
+    li.append(label, value, track);
+    return li;
+  }));
+}
+
+async function loadStats() {
+  $('#stats').classList.add('stats--loading');
+  const { data, error } = await supabase.rpc('analytics_summary', { p_days: stats.days });
+  $('#stats').classList.remove('stats--loading');
+  if (error) return appMessage(`Statistiques indisponibles : ${error.message}`, 'error');
+  stats.loaded = true;
+  stats.data = data;
+  $('#kpi-views').textContent = numberFr.format(data.views);
+  $('#kpi-visitors').textContent = numberFr.format(data.visitors);
+  $('#kpi-countries').textContent = numberFr.format(data.countries_count);
+  renderDailyChart(data.daily);
+  ['countries', 'cities', 'pages', 'sources', 'devices', 'browsers'].forEach((key) => renderTop(key, data.top[key]));
+}
+
+document.querySelectorAll('[data-days]').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-days]').forEach((b) => {
+      b.classList.toggle('filter-pill--active', b === button);
+      b.setAttribute('aria-pressed', String(b === button));
+    });
+    stats.days = Number(button.dataset.days);
+    loadStats();
+  });
+});
+
+document.querySelector('[data-tab="stats"]').addEventListener('click', () => {
+  if (!stats.loaded) loadStats();
+});
+
+// Redessine le graphique à la bonne largeur (onglet affiché, fenêtre redimensionnée)
+let chartWidth = 0;
+new ResizeObserver(([entry]) => {
+  const width = Math.round(entry.contentRect.width);
+  if (!stats.data || !width || width === chartWidth) return;
+  chartWidth = width;
+  renderDailyChart(stats.data.daily);
+}).observe($('#stats-chart'));
+
+/* 8. Démarrage */
 const { data: { session } } = await supabase.auth.getSession();
 showApp(session);

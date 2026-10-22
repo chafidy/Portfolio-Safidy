@@ -634,17 +634,21 @@
         <h2 id="projects-title">Projets récents</h2>
 
         <div class="filter-list" role="group" aria-label="Filtrer les projets par catégorie">
+          <!-- build:featured-filters -->
           <button class="filter-pill filter-pill--active" type="button" data-filter="all"
             aria-pressed="true">Tous</button>
           <button class="filter-pill" type="button" data-filter="branding" aria-pressed="false">Branding</button>
           <button class="filter-pill" type="button" data-filter="ui-ux" aria-pressed="false">UI/UX</button>
           <button class="filter-pill" type="button" data-filter="web" aria-pressed="false">Web</button>
           <button class="filter-pill" type="button" data-filter="packaging" aria-pressed="false">Packaging</button>
+          <!-- /build:featured-filters -->
         </div>
 
         <p class="projects__status" aria-live="polite"></p>
 
         <ul class="project-grid" id="project-grid">
+          <!-- build:featured -->
+          <!-- Régénéré au déploiement : les 6 projets « À la une » du backoffice. -->
           <li class="project-card" data-category="branding">
             <article>
               <a class="project-card__thumb-trigger" href="assets/project/p1.webp" target="_blank" rel="noopener">
@@ -769,6 +773,7 @@
               </div>
             </article>
           </li>
+          <!-- /build:featured -->
         </ul>
 
         <div class="projects__more">
