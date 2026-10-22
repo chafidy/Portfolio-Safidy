@@ -68,7 +68,7 @@ js/
     └── lightbox.js            Aperçu plein écran des photos de projet
 assets/
 ├── img/                     avatar-assis.png, avatar-debout.png, ...
-├── project/                 Photos des 12 projets (p1.png à p12.png)
+├── project/                 Photos des 12 projets (p1.webp à p12.webp)
 ├── icons/                   (vide — icônes clay PNG à ajouter)
 └── fonts/                   (vide — Google Fonts en fallback CDN)
 ```
