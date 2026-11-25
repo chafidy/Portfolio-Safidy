@@ -17,6 +17,7 @@
 /* Layout */
 @import url('layout/_grid.css');
 @import url('layout/_header.css');
+@import url('layout/_backdrop.css');
 
 /* Composants */
 @import url('components/_buttons.css');
@@ -26,6 +27,7 @@
 @import url('components/_cubes.css');
 @import url('components/_lightbox.css');
 @import url('components/_chatbot.css');
+@import url('components/_cursor.css');
 
 /* Sections */
 @import url('sections/_hero.css');

@@ -86,10 +86,44 @@
 .hero__role:nth-child(2) { animation-delay: 3s; }
 .hero__role:nth-child(3) { animation-delay: 6s; }
 
+/* Le flou léger masque le chevauchement des deux rôles pendant le fondu */
 @keyframes role-fade {
-  0%, 3% { opacity: 0; transform: translateY(6px); }
-  10%, 28% { opacity: 1; transform: translateY(0); }
-  35%, 100% { opacity: 0; transform: translateY(-6px); }
+  0%, 3% { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+  10%, 28% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  35%, 100% { opacity: 0; transform: translateY(-8px); filter: blur(4px); }
+}
+
+/* Entrée du hero au chargement : moment vu par chaque visiteur, une seule
+   fois — on s'autorise une chorégraphie en cascade. `both` garde l'état
+   initial pendant le délai. Le reset global (prefers-reduced-motion)
+   ramène ces durées à ~0 : le contenu s'affiche directement. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(24px); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes hero-pop {
+  from { opacity: 0; transform: translateY(32px) scale(.94); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero__content > * {
+  animation: hero-rise .8s var(--ease-out) both;
+}
+
+.hero__content > :nth-child(1) { animation-delay: .05s; }
+.hero__content > :nth-child(2) { animation-delay: .13s; }
+.hero__content > :nth-child(3) { animation-delay: .21s; }
+.hero__content > :nth-child(4) { animation-delay: .29s; }
+.hero__content > :nth-child(5) { animation-delay: .37s; }
+.hero__content > :nth-child(6) { animation-delay: .45s; }
+
+.hero__visual {
+  animation: hero-pop 1s var(--ease-out) .2s both;
+}
+
+.hero__cubes {
+  animation: hero-rise 1.2s var(--ease-out) .5s both;
 }
 
 @media (prefers-reduced-motion: reduce) {

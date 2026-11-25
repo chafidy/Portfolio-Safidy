@@ -15,6 +15,8 @@ import { init as initTheme } from './modules/theme.js';
 import { init as initLightbox } from './modules/lightbox.js';
 import { init as initChatbot } from './modules/chatbot.js';
 import { init as initAnalytics } from './modules/analytics.js';
+import { init as initBackdrop } from './modules/backdrop.js';
+import { init as initCursor } from './modules/cursor.js';
 
 document.documentElement.classList.add('has-js');
 
@@ -27,3 +29,5 @@ initTheme();
 initLightbox();
 initChatbot();
 initAnalytics();
+initBackdrop();
+initCursor();

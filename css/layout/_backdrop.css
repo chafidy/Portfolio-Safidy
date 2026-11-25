@@ -1,0 +1,44 @@
+/**
+ * FICHIER : _backdrop.css
+ * RÔLE    : Fond vivant (js/modules/backdrop.js) : trame de points lilas
+ *           fixe derrière tout le contenu + canvas de la loupe et des ondes.
+ *           Les deux éléments sont injectés par le JS ; sans JS ou avec
+ *           « réduire les animations », le fond crème reste uni.
+ * DÉPEND  : _tokens.css
+ */
+
+/* Trame au repos : une seule couche CSS que le navigateur déplace sans la
+   repeindre. Elle déborde d'une cellule en haut et en bas pour que le
+   parallaxe (translateY dans [0, 28px[) ne laisse jamais de vide.
+   Le pas (28px) doit rester égal à SPACING dans backdrop.js. */
+.backdrop-grid {
+  position: fixed;
+  top: -28px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 56px);
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at center, rgba(169, 165, 236, .55) 1.3px, transparent 1.8px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+  will-change: transform;
+  /* Trame plus discrète en bas de l'écran, là où l'on lit */
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .55) 100%);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-grid,
+  .backdrop {
+    display: none;
+  }
+}

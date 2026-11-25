@@ -131,11 +131,37 @@
   box-shadow: var(--shadow-clay-lg);
   padding: calc(var(--header-height) + var(--sp-3)) var(--sp-3) var(--sp-3);
   transform: translateX(100%);
-  transition: transform var(--dur-med) var(--ease-clay);
+  /* Pas de rebond : collé au bord droit, un dépassement laisserait voir
+     un vide. Fermeture plus rapide que l'ouverture. */
+  transition: transform .28s var(--ease-drawer);
 }
 
 .header__nav--open {
   transform: translateX(0);
+  transition-duration: .42s;
+}
+
+/* Liens qui glissent en cascade à l'ouverture du panneau */
+@media (max-width: 899px) {
+  .header__nav-list > li {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity .2s var(--ease-out), transform .2s var(--ease-out);
+  }
+
+  .header__nav--open .header__nav-list > li {
+    opacity: 1;
+    transform: none;
+    transition-duration: .45s;
+  }
+
+  .header__nav--open .header__nav-list > li:nth-child(1) { transition-delay: .08s; }
+  .header__nav--open .header__nav-list > li:nth-child(2) { transition-delay: .12s; }
+  .header__nav--open .header__nav-list > li:nth-child(3) { transition-delay: .16s; }
+  .header__nav--open .header__nav-list > li:nth-child(4) { transition-delay: .2s; }
+  .header__nav--open .header__nav-list > li:nth-child(5) { transition-delay: .24s; }
+  .header__nav--open .header__nav-list > li:nth-child(6) { transition-delay: .28s; }
+  .header__nav--open .header__nav-list > li:nth-child(n+7) { transition-delay: .32s; }
 }
 
 @media (min-width: 900px) {
@@ -171,7 +197,13 @@
 @media (prefers-reduced-motion: reduce) {
   .header,
   .header__nav,
-  .header__burger-line {
+  .header__burger-line,
+  .header__nav-list > li {
     transition: none;
+  }
+
+  .header__nav-list > li {
+    opacity: 1;
+    transform: none;
   }
 }

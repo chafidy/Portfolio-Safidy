@@ -51,13 +51,16 @@
   }
 }
 
+/* --filter-delay est posé par filter.js : les cartes réapparaissent en
+   cascade après un changement de filtre. */
 .project-card {
-  transition: opacity var(--dur-med) ease, transform var(--dur-med) var(--ease-clay);
+  transition: opacity .35s var(--ease-out), transform .45s var(--ease-clay);
+  transition-delay: var(--filter-delay, 0ms);
 }
 
 .project-card--hidden {
   opacity: 0;
-  transform: scale(.92);
+  transform: translateY(12px) scale(.94);
   position: absolute;
   visibility: hidden;
   pointer-events: none;
@@ -72,9 +75,11 @@
   transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
 }
 
-.project-card > article:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-clay-lg);
+@media (hover: hover) and (pointer: fine) {
+  .project-card > article:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-clay-lg);
+  }
 }
 
 .project-card__thumb {
@@ -151,6 +156,12 @@
 .project-card__thumb-trigger:hover::after,
 .project-card__thumb-trigger:focus-visible::after {
   transform: scale(1);
+}
+
+/* Avec l'anneau curseur, la pastille « Voir » remplace le badge « + » au
+   survol souris (le badge reste pour la navigation clavier). */
+.has-cursor-ring .project-card__thumb-trigger:hover:not(:focus-visible)::after {
+  opacity: 0;
 }
 
 .project-card__body {

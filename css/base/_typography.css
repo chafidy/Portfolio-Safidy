@@ -99,7 +99,9 @@ a {
   transition: color var(--dur-fast) ease;
 }
 
-a:hover {
+/* :not(.btn) — sinon cette règle (0,1,1) l'emporte sur .btn--primary
+   (0,1,0) et le texte du bouton devient violet sur fond violet. */
+a:not(.btn):hover {
   color: var(--clay-purple-600);
 }
 

@@ -19,10 +19,51 @@
   background: var(--clay-white);
   box-shadow: var(--shadow-clay-lg);
   overflow: hidden;
+
+  /* Fermeture : rapide, sans rebond. display/overlay en allow-discrete
+     gardent le dialog visible le temps de l'animation de sortie. */
+  opacity: 0;
+  transform: translateY(12px) scale(.96);
+  transition:
+    opacity .18s var(--ease-out),
+    transform .18s var(--ease-out),
+    overlay .18s allow-discrete,
+    display .18s allow-discrete;
+}
+
+.lightbox[open] {
+  opacity: 1;
+  transform: none;
+  transition-duration: .32s;
+}
+
+@starting-style {
+  .lightbox[open] {
+    opacity: 0;
+    transform: translateY(16px) scale(.96);
+  }
 }
 
 .lightbox::backdrop {
+  background: rgba(42, 42, 46, 0);
+  backdrop-filter: blur(0);
+  transition:
+    background .25s var(--ease-out),
+    backdrop-filter .25s var(--ease-out),
+    overlay .25s allow-discrete,
+    display .25s allow-discrete;
+}
+
+.lightbox[open]::backdrop {
   background: rgba(42, 42, 46, .72);
+  backdrop-filter: blur(4px);
+}
+
+@starting-style {
+  .lightbox[open]::backdrop {
+    background: rgba(42, 42, 46, 0);
+    backdrop-filter: blur(0);
+  }
 }
 
 .lightbox__inner {

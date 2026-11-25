@@ -65,7 +65,7 @@
   background: var(--clay-white, #ffffff);
   box-shadow: var(--shadow-clay-sm);
   overflow: hidden;
-  transition: box-shadow 0.35s ease, transform 0.3s ease;
+  transition: box-shadow 0.35s ease, transform 0.3s var(--ease-clay);
 }
 
 /* slide coloré qui monte depuis le bas */
@@ -82,8 +82,8 @@
   z-index: 0;
   transform: translateY(100%);
   opacity: 0;
-  transition: transform 0.4s cubic-bezier(.4,0,.2,1),
-              opacity 0.35s ease;
+  transition: transform 0.4s var(--ease-out),
+              opacity 0.35s var(--ease-out);
   pointer-events: none;
 }
 
@@ -93,22 +93,24 @@
   max-width: 70%;
   max-height: 70%;
   object-fit: contain;
-  transition: transform 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s var(--ease-clay), filter 0.3s ease;
 }
 
-/* ── Hover ── */
-.techno-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 24px 2px color-mix(in srgb, var(--tc) 35%, transparent),
-              var(--shadow-clay-md);
-}
+/* ── Hover (souris uniquement) ── */
+@media (hover: hover) and (pointer: fine) {
+  .techno-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 24px 2px color-mix(in srgb, var(--tc) 35%, transparent),
+                var(--shadow-clay-md);
+  }
 
-.techno-card:hover::after {
-  transform: translateY(0%);
-  opacity: 1;
-}
+  .techno-card:hover::after {
+    transform: translateY(0%);
+    opacity: 1;
+  }
 
-.techno-card:hover img {
-  transform: scale(1.1) translateY(-2px);
-  filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--tc) 50%, transparent));
+  .techno-card:hover img {
+    transform: scale(1.1) translateY(-2px);
+    filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--tc) 50%, transparent));
+  }
 }

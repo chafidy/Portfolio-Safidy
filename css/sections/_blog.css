@@ -50,9 +50,11 @@
   transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
 }
 
-.post-card > article:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-clay-lg);
+@media (hover: hover) and (pointer: fine) {
+  .post-card > article:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-clay-lg);
+  }
 }
 
 .post-card__link {

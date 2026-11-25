@@ -21,6 +21,9 @@ function applyFilter(filterValue) {
   projectCards.forEach((card) => {
     const categories = card.dataset.category.split(' ');
     const matches = filterValue === 'all' || categories.includes(filterValue);
+    // Cascade d'apparition (40 ms par carte, plafonnée) ; les cartes
+    // masquées disparaissent sans délai.
+    card.style.setProperty('--filter-delay', matches ? `${Math.min(visibleCount * 40, 320)}ms` : '0ms');
     card.classList.toggle('project-card--hidden', !matches);
     if (matches) visibleCount += 1;
   });

@@ -71,12 +71,14 @@
   max-width: 320px;
   object-fit: contain;
   opacity: 1; /* Garde la couleur originale */
-  transition: transform 0.25s ease;
+  transition: transform 0.3s var(--ease-clay);
   cursor: default;
 }
 
-.clients__logo:hover {
-  transform: scale(1.12);
+@media (hover: hover) and (pointer: fine) {
+  .clients__logo:hover {
+    transform: scale(1.08);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

@@ -34,9 +34,11 @@
   transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
 }
 
-.card:hover {
-  transform: translateY(-8px) rotate(-.5deg);
-  box-shadow: var(--shadow-clay-lg);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-8px) rotate(-.5deg);
+    box-shadow: var(--shadow-clay-lg);
+  }
 }
 
 .card__icon {
