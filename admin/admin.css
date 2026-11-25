@@ -393,6 +393,27 @@
   aspect-ratio: 16 / 9;
 }
 
+/* Vidéos verticales (reels 9:16) */
+.admin-drop--portrait {
+  aspect-ratio: 9 / 16;
+  max-height: 420px;
+  margin-inline: auto;
+}
+
+.admin-drop--small {
+  max-height: 180px;
+}
+
+.admin-row__thumb--portrait {
+  width: 40px;
+  height: 64px;
+}
+
+.admin-row__duration {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
 .admin-drop:hover,
 .admin-drop--over {
   border-color: var(--clay-purple-500);

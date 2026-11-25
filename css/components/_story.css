@@ -1,0 +1,307 @@
+/**
+ * FICHIER : _story.css
+ * RÔLE    : Lecteur plein écran façon « stories » pour les reels de la
+ *           section Motion (js/modules/stories.js) : barres de
+ *           progression, zones de tap précédent / suivant, appui long pour
+ *           mettre en pause, son, légende. Basé sur <dialog> (focus, Échap
+ *           et couche supérieure natifs).
+ * DÉPEND  : _tokens.css
+ */
+
+.story {
+  /* Hauteur du cadre 9:16 : 88 % de l'écran, sans déborder en largeur */
+  --frame-h: min(88dvh, calc((100vw - 32px) * 16 / 9));
+
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: scale(.96);
+  transition:
+    opacity .18s var(--ease-out),
+    transform .18s var(--ease-out),
+    overlay .18s allow-discrete,
+    display .18s allow-discrete;
+}
+
+.story[open] {
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  transform: none;
+  transition-duration: .32s;
+}
+
+@starting-style {
+  .story[open] {
+    opacity: 0;
+    transform: scale(.96);
+  }
+}
+
+.story::backdrop {
+  background: rgba(20, 20, 28, 0);
+  transition: background .25s var(--ease-out), overlay .25s allow-discrete, display .25s allow-discrete;
+}
+
+.story[open]::backdrop {
+  background: rgba(20, 20, 28, .94);
+}
+
+@starting-style {
+  .story[open]::backdrop {
+    background: rgba(20, 20, 28, 0);
+  }
+}
+
+/* Cadre téléphone */
+.story__frame {
+  position: relative;
+  height: var(--frame-h);
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #000;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Petit écran : la vidéo occupe tout l'écran, comme une vraie story */
+@media (max-width: 639px) {
+  .story__frame {
+    width: 100vw;
+    height: 100dvh;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+}
+
+.story__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Fondu court au changement de vidéo */
+  transition: opacity .2s var(--ease-out);
+}
+
+.story.is-switching .story__video {
+  opacity: 0;
+}
+
+/* Barres de progression */
+.story__progress {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.story__progress li {
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, .35);
+}
+
+.story__progress span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Zones de tap : 1/3 gauche = précédent, 2/3 droite = suivant */
+.story__zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.story__zone--prev {
+  left: 0;
+  width: 33%;
+}
+
+.story__zone--next {
+  right: 0;
+  width: 67%;
+}
+
+.story__zone:focus-visible {
+  outline: 3px solid var(--clay-honey);
+  outline-offset: -6px;
+  border-radius: var(--radius-lg);
+}
+
+/* Son + fermer */
+.story__top {
+  position: absolute;
+  top: 22px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+.story__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(20, 20, 28, .35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-clay);
+}
+
+.story__icon:active {
+  transform: scale(.92);
+  transition-duration: var(--dur-press);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .story__icon:hover {
+    background: rgba(20, 20, 28, .6);
+  }
+}
+
+.story__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.story__icon-mute,
+#story-mute[aria-pressed="true"] .story__icon-wave {
+  display: none;
+}
+
+#story-mute[aria-pressed="true"] .story__icon-mute {
+  display: inline;
+}
+
+/* Légende */
+.story__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: var(--sp-6) var(--sp-3) var(--sp-3);
+  color: #fff;
+  background: linear-gradient(to top, rgba(0, 0, 0, .7), transparent);
+  pointer-events: none;
+}
+
+.story__title {
+  color: #fff;
+  font-size: var(--text-lg);
+  line-height: 1.25;
+}
+
+.story__text {
+  margin-top: 4px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, .85);
+}
+
+.story__text:empty {
+  display: none;
+}
+
+/* Indicateur de pause */
+.story__paused {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: 2;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(20, 20, 28, .4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: scale(.9);
+  pointer-events: none;
+  transition: opacity .16s var(--ease-out), transform .2s var(--ease-out);
+}
+
+.story__paused svg {
+  width: 30px;
+  height: 30px;
+}
+
+.story.is-paused .story__paused {
+  opacity: 1;
+  transform: none;
+}
+
+/* Flèches de part et d'autre du cadre (grand écran) */
+.story__nav {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .story__nav {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-top: -24px;
+    border-radius: 50%;
+    color: var(--clay-ink);
+    background: var(--clay-white);
+    box-shadow: var(--shadow-clay-md);
+    transition: transform var(--dur-fast) var(--ease-clay), opacity var(--dur-fast) ease;
+  }
+
+  .story__nav--prev {
+    left: calc(50% - var(--frame-h) * 9 / 32 - 72px);
+  }
+
+  .story__nav--next {
+    right: calc(50% - var(--frame-h) * 9 / 32 - 72px);
+  }
+
+  .story__nav:active {
+    transform: scale(.92);
+    transition-duration: var(--dur-press);
+  }
+
+  .story__nav:disabled {
+    opacity: .3;
+    cursor: default;
+  }
+
+  .story__nav svg {
+    width: 22px;
+    height: 22px;
+  }
+}

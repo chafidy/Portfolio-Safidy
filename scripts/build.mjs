@@ -2,7 +2,7 @@
  * FICHIER : build.mjs
  * RÔLE    : Génère le site statique dans dist/ à partir des contenus Supabase
  *           (exécuté par Netlify à chaque déploiement, cf. netlify.toml).
- *             - index.html   : les 6 projets « À la une »
+ *             - index.html   : les 6 projets « À la une » + les vidéos motion
  *             - projets.html : grille des projets publiés
  *             - blog.html    : liste des articles publiés
  *             - blog/<slug>.html : une page par article (SEO complet)
@@ -90,6 +90,28 @@ const renderProject = (p) => `          <li class="project-card" data-category="
                 ${renderTags(p.tags || [])}
               </div>
             </article>
+          </li>`;
+
+const formatDuration = (seconds) => {
+  const s = Math.round(Number(seconds) || 0);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
+
+// Carte « reel » de la section Motion. Les données du lecteur stories
+// (js/modules/stories.js) sont lues sur ces attributs data-*.
+const renderVideo = (v, index) => `          <li class="reel-card" data-index="${index}"
+            data-src="${escapeHtml(v.video_url)}" data-poster="${escapeHtml(v.poster_url)}"
+            data-title="${escapeHtml(v.title)}" data-text="${escapeHtml(v.description)}">
+            <button class="reel-card__trigger" type="button" aria-label="Regarder « ${escapeHtml(v.title)} »">
+              <video class="reel-card__video" src="${escapeHtml(v.video_url)}"${v.poster_url ? `poster="${escapeHtml(v.poster_url)}"` : ''}
+                muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+              <span class="reel-card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+              </span>
+              <span class="reel-card__duration">${formatDuration(v.duration_seconds)}</span>
+            </button>
+            <h3 class="reel-card__title">${escapeHtml(v.title)}</h3>
+            ${v.tags?.length ? `<p class="reel-card__tags">${v.tags.map(escapeHtml).join(' · ')}</p>` : ''}
           </li>`;
 
 // Pilules de filtre de l'accueil : uniquement les catégories des projets à la une
@@ -239,11 +261,17 @@ const sitemapUrl = (loc, lastmod, changefreq, priority) => `  <url>
 /* ---------- Build ---------- */
 
 async function main() {
-  const [projects, posts] = await Promise.all([
+  const [projects, posts, videos] = await Promise.all([
     api('projects?select=*&published=eq.true&order=sort_order.asc,created_at.asc'),
     api('posts?select=*&published=eq.true&published_at=not.is.null&order=published_at.desc'),
+    // Tolérant : si la table n'existe pas encore (migration non appliquée),
+    // la section Motion reste simplement masquée.
+    api('videos?select=*&published=eq.true&order=sort_order.asc,created_at.asc&limit=6').catch((error) => {
+      console.warn(`Vidéos ignorées : ${error.message}`);
+      return [];
+    }),
   ]);
-  console.log(`Supabase : ${projects.length} projets, ${posts.length} articles publiés`);
+  console.log(`Supabase : ${projects.length} projets, ${posts.length} articles, ${videos.length} vidéos publiés`);
 
   // Copie du site (élément par élément : dist/ est lui-même dans ROOT)
   const isPublished = (name) =>
@@ -264,16 +292,24 @@ async function main() {
   await writeFile(projetsFile, projetsHtml);
 
   // index.html : section « Projets récents » (6 projets à la une au maximum)
+  const indexFile = join(DIST, 'index.html');
+  let indexHtml = await readFile(indexFile, 'utf8');
   const featured = projects.filter((p) => p.featured).slice(0, 6);
   if (featured.length) {
-    const indexFile = join(DIST, 'index.html');
-    let indexHtml = await readFile(indexFile, 'utf8');
     indexHtml = replaceBlock(indexHtml, 'featured', featured.map(renderProject).join('\n'), 'index.html');
     indexHtml = replaceBlock(indexHtml, 'featured-filters', renderFilters(featured), 'index.html');
-    await writeFile(indexFile, indexHtml);
   } else {
     console.warn('Aucun projet à la une : la section de l\'accueil garde son contenu actuel.');
   }
+
+  // index.html : section « Motion » (reels), affichée seulement s'il y a des vidéos
+  if (videos.length) {
+    indexHtml = replaceBlock(indexHtml, 'videos', videos.map(renderVideo).join('\n'), 'index.html');
+    const hiddenSection = 'id="motion" aria-labelledby="motion-title" hidden';
+    if (!indexHtml.includes(hiddenSection)) throw new Error('Section #motion introuvable dans index.html');
+    indexHtml = indexHtml.replace(hiddenSection, 'id="motion" aria-labelledby="motion-title"');
+  }
+  await writeFile(indexFile, indexHtml);
 
   // blog.html
   const blogFile = join(DIST, 'blog.html');
@@ -302,7 +338,7 @@ ${posts.map(renderPostCard).join('\n')}
   sitemap = replaceBlock(sitemap, 'blog', blogUrls.join('\n'), 'sitemap.xml');
   await writeFile(sitemapFile, sitemap);
 
-  console.log(`dist/ généré : index.html (${featured.length} à la une), projets.html, blog.html, ${posts.length} article(s), sitemap.xml`);
+  console.log(`dist/ généré : index.html (${featured.length} à la une, ${videos.length} vidéos), projets.html, blog.html, ${posts.length} article(s), sitemap.xml`);
 }
 
 main().catch((error) => {

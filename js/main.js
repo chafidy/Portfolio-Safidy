@@ -17,6 +17,7 @@ import { init as initChatbot } from './modules/chatbot.js';
 import { init as initAnalytics } from './modules/analytics.js';
 import { init as initBackdrop } from './modules/backdrop.js';
 import { init as initCursor } from './modules/cursor.js';
+import { init as initStories } from './modules/stories.js';
 
 document.documentElement.classList.add('has-js');
 
@@ -31,3 +32,4 @@ initChatbot();
 initAnalytics();
 initBackdrop();
 initCursor();
+initStories();

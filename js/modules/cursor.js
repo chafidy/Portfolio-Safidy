@@ -23,6 +23,7 @@ const LABELS = [
   ['[data-cursor-label]', (el) => el.dataset.cursorLabel],
   ['.project-card__thumb-trigger', () => 'Voir'],
   ['.post-card__link', () => 'Lire'],
+  ['.reel-card__trigger', () => '▶ Voir'],
 ];
 
 const SIZE = { idle: 34, dot: 8, badge: 78, large: 56 };

@@ -1,0 +1,155 @@
+/**
+ * FICHIER : _motion.css
+ * RÔLE    : Section « Motion » de l'accueil — rangée de reels verticaux
+ *           (9:16) au format téléphone. Survol (souris) : aperçu muet en
+ *           boucle ; clic : lecteur stories (components/_story.css).
+ *           Les cartes sont générées au build (scripts/build.mjs).
+ * DÉPEND  : _tokens.css, _grid.css
+ */
+
+.motion__lead {
+  margin-top: var(--sp-1);
+  max-width: 60ch;
+}
+
+/* Rangée défilante sur mobile (2 cartes + un bout de la 3e, pour inviter
+   à glisser) ; les 6 reels tiennent sur une ligne sur grand écran. */
+.reel-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 44%;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  padding: var(--sp-1) var(--sp-1) var(--sp-3);
+  margin-inline: calc(var(--sp-1) * -1);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--sp-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--clay-purple-300) transparent;
+}
+
+@media (min-width: 640px) {
+  .reel-list {
+    grid-auto-columns: 30%;
+    gap: var(--sp-3);
+  }
+}
+
+@media (min-width: 1200px) {
+  .reel-list {
+    grid-auto-columns: calc((100% - 5 * var(--sp-3)) / 6);
+    overflow-x: visible;
+  }
+}
+
+.reel-card {
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+.reel-card__trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--clay-ink);
+  box-shadow: var(--shadow-clay-md);
+  transition: transform var(--dur-med) var(--ease-clay), box-shadow var(--dur-med) ease;
+}
+
+.reel-card__trigger:active {
+  transform: scale(.97);
+  transition-duration: var(--dur-press);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .reel-card__trigger:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-clay-lg);
+  }
+}
+
+.reel-card__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Voile bas pour la lisibilité de la durée */
+.reel-card__trigger::after {
+  content: '';
+  position: absolute;
+  inset: 55% 0 0;
+  background: linear-gradient(to top, rgba(42, 42, 46, .55), transparent);
+  pointer-events: none;
+}
+
+/* Bouton lecture « verre » au centre */
+.reel-card__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: 1;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, .22);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .5), 0 8px 20px rgba(42, 42, 46, .25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-med) var(--ease-out);
+}
+
+.reel-card__play svg {
+  width: 22px;
+  height: 22px;
+  margin-left: 3px; /* centrage optique du triangle */
+}
+
+/* Pendant l'aperçu, le bouton s'efface pour laisser voir la vidéo */
+.reel-card.is-previewing .reel-card__play {
+  opacity: 0;
+  transform: scale(.85);
+}
+
+.reel-card__duration {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #fff;
+  background: rgba(42, 42, 46, .55);
+}
+
+.reel-card__title {
+  margin-top: var(--sp-2);
+  font-size: var(--text-base);
+  line-height: 1.3;
+}
+
+.reel-card__tags {
+  margin-top: 4px;
+  font-size: var(--text-xs);
+  color: var(--clay-ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-card__trigger,
+  .reel-card__trigger:hover,
+  .reel-card__trigger:active {
+    transition: none;
+    transform: none;
+  }
+}

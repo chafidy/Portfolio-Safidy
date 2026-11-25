@@ -11,6 +11,7 @@
  *   2. Images (conversion WebP, upload, suppression)
  *   3. Authentification
  *   4. Projets
+ *   4 bis. Vidéos motion
  *   5. Articles
  *   6. Publication sur le site
  *   7. Statistiques
@@ -24,7 +25,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY, MEDIA_BUCKET, CATEGORIES, TAG_COLORS }
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (selector) => document.querySelector(selector);
 
-const state = { projects: [], posts: [] };
+const state = { projects: [], posts: [], videos: [] };
 const PENDING_KEY = 'admin.pendingChanges';
 
 const escapeHtml = (value = '') => String(value)
@@ -154,7 +155,7 @@ async function showApp(session) {
   $('#view-app').hidden = false;
   storageSet('analytics.ignore', '1'); // tes propres visites ne faussent pas les statistiques
   renderPending();
-  await Promise.all([loadProjects(), loadPosts()]);
+  await Promise.all([loadProjects(), loadPosts(), loadVideos()]);
 }
 
 $('#login-form').addEventListener('submit', async (event) => {
@@ -396,6 +397,308 @@ $('#project-delete').addEventListener('click', async () => {
   markPending();
   appMessage(`Projet « ${project.title} » supprimé.`, 'success');
   await loadProjects();
+});
+
+/* 4 bis. Vidéos motion (reels verticaux) */
+const VIDEOS_MAX = 6;
+const VIDEO_MAX_BYTES = 50 * 1024 * 1024; // plafond du bucket (offre gratuite Supabase)
+const VIDEO_WARN_BYTES = 15 * 1024 * 1024;
+
+const videoForm = {
+  dialog: $('#video-dialog'),
+  title: $('#video-title'),
+  description: $('#video-description'),
+  tags: $('#video-tags'),
+  published: $('#video-published'),
+  file: $('#video-file'),
+  preview: $('#video-preview'),
+  hint: $('#video-hint'),
+  info: $('#video-file-info'),
+  poster: $('#video-poster'),
+  posterPreview: $('#video-poster-preview'),
+  posterHint: $('#video-poster-hint'),
+  msg: $('#video-msg'),
+  current: null,
+  meta: null, // { duration, posterBlob } de la vidéo choisie
+};
+
+const publishedVideosCount = () => state.videos.filter((v) => v.published).length;
+const formatDuration = (seconds) => {
+  const s = Math.round(Number(seconds) || 0);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
+const formatSize = (bytes) => `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
+
+/**
+ * Lit la durée d'une vidéo locale et en extrait une image de couverture
+ * (WebP, 720 px de large max) à 25 % de la durée, plafonné à 1,5 s.
+ */
+function readVideoMeta(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const video = document.createElement('video');
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.src = url;
+    video.addEventListener('error', () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Vidéo illisible dans ce navigateur (utilisez un MP4 H.264).'));
+    }, { once: true });
+    video.addEventListener('loadedmetadata', () => {
+      video.currentTime = Math.min(1.5, video.duration * 0.25 || 0);
+    }, { once: true });
+    video.addEventListener('seeked', () => {
+      const scale = Math.min(1, 720 / video.videoWidth);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(video.videoWidth * scale);
+      canvas.height = Math.round(video.videoHeight * scale);
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((posterBlob) => {
+        URL.revokeObjectURL(url);
+        resolve({
+          duration: video.duration,
+          width: video.videoWidth,
+          height: video.videoHeight,
+          posterBlob,
+        });
+      }, 'image/webp', 0.82);
+    }, { once: true });
+  });
+}
+
+async function uploadBlob(blob, folder, baseName, ext, contentType) {
+  const path = `${folder}/${Date.now()}-${slugify(baseName) || 'media'}.${ext}`;
+  const { error } = await supabase.storage.from(MEDIA_BUCKET)
+    .upload(path, blob, { contentType, cacheControl: '31536000', upsert: false });
+  if (error) throw error;
+  return supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path).data.publicUrl;
+}
+
+async function onVideoChosen(file) {
+  videoForm.meta = null;
+  setMessage(videoForm.msg, '');
+  if (!file) return;
+  if (!file.type.startsWith('video/')) return setMessage(videoForm.msg, 'Choisissez un fichier vidéo (MP4).', 'error');
+  if (file.size > VIDEO_MAX_BYTES) {
+    videoForm.file.value = '';
+    return setMessage(videoForm.msg, `Vidéo trop lourde (${formatSize(file.size)}) : 50 Mo maximum. Exportez-la en 720×1280, H.264.`, 'error');
+  }
+  videoForm.preview.src = URL.createObjectURL(file);
+  videoForm.preview.hidden = false;
+  videoForm.hint.hidden = true;
+  videoForm.preview.play().catch(() => {});
+  videoForm.info.textContent = 'Analyse de la vidéo…';
+  try {
+    videoForm.meta = await readVideoMeta(file);
+    const { duration, width, height } = videoForm.meta;
+    const portrait = height > width;
+    videoForm.info.textContent = `${formatDuration(duration)} · ${width}×${height} · ${formatSize(file.size)}`
+      + (portrait ? '' : ' — attention : vidéo non verticale')
+      + (file.size > VIDEO_WARN_BYTES ? ' — conseillé : < 15 Mo pour un chargement rapide' : '');
+    if (!videoForm.poster.files[0]) {
+      videoForm.posterPreview.src = URL.createObjectURL(videoForm.meta.posterBlob);
+      videoForm.posterPreview.hidden = false;
+      videoForm.posterHint.hidden = true;
+    }
+  } catch (error) {
+    videoForm.info.textContent = '';
+    setMessage(videoForm.msg, error.message, 'error');
+  }
+}
+
+videoForm.file.addEventListener('change', () => onVideoChosen(videoForm.file.files[0]));
+{
+  const zone = document.querySelector('label[for="video-file"]');
+  zone.addEventListener('dragover', (event) => { event.preventDefault(); zone.classList.add('admin-drop--over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('admin-drop--over'));
+  zone.addEventListener('drop', (event) => {
+    event.preventDefault();
+    zone.classList.remove('admin-drop--over');
+    const file = event.dataTransfer.files[0];
+    if (!file) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    videoForm.file.files = transfer.files;
+    onVideoChosen(file);
+  });
+}
+setupDropZone(videoForm.poster, videoForm.posterPreview, videoForm.posterHint);
+
+async function loadVideos() {
+  const { data, error } = await supabase.from('videos').select('*')
+    .order('sort_order', { ascending: true }).order('created_at', { ascending: true });
+  if (error) return appMessage(`Chargement des vidéos impossible : ${error.message}`, 'error');
+  state.videos = data;
+  renderVideos();
+}
+
+function renderVideos() {
+  $('#videos-count').textContent = `(${state.videos.length})`;
+  $('#videos-published-count').textContent = `Publiées : ${publishedVideosCount()} / ${VIDEOS_MAX}`;
+  $('#videos-list').innerHTML = state.videos.length ? state.videos.map((v, index) => `
+    <li class="admin-row${v.published ? '' : ' admin-row--draft'}" data-id="${v.id}">
+      ${v.poster_url
+    ? `<img class="admin-row__thumb admin-row__thumb--portrait" src="${escapeHtml(previewUrl(v.poster_url))}" alt="" loading="lazy">`
+    : '<span class="admin-row__thumb admin-row__thumb--portrait"></span>'}
+      <div>
+        <p class="admin-row__title">${escapeHtml(v.title)}</p>
+        <p class="admin-row__meta">
+          <span class="admin-row__duration">${formatDuration(v.duration_seconds)}</span>
+          <button class="admin-status${v.published ? '' : ' admin-status--draft'}" type="button" data-action="toggle"
+            title="Cliquer pour ${v.published ? 'masquer' : 'publier'}">${v.published ? 'Publiée' : 'Brouillon'}</button>
+        </p>
+      </div>
+      <div class="admin-row__actions">
+        <button class="admin-icon-btn" type="button" data-action="up" aria-label="Monter" ${index === 0 ? 'disabled' : ''}>↑</button>
+        <button class="admin-icon-btn" type="button" data-action="down" aria-label="Descendre" ${index === state.videos.length - 1 ? 'disabled' : ''}>↓</button>
+        <button class="admin-icon-btn" type="button" data-action="edit">Modifier</button>
+      </div>
+    </li>`).join('') : '<li class="admin-empty">Aucune vidéo pour l\'instant. Ajoutez votre premier reel avec « Nouvelle vidéo ».</li>';
+}
+
+$('#videos-list').addEventListener('click', async (event) => {
+  const button = event.target.closest('[data-action]');
+  if (!button) return;
+  const video = state.videos.find((v) => v.id === button.closest('[data-id]').dataset.id);
+  const action = button.dataset.action;
+
+  if (action === 'edit') return openVideo(video);
+
+  if (action === 'toggle') {
+    if (!video.published && publishedVideosCount() >= VIDEOS_MAX) {
+      return appMessage(`Déjà ${VIDEOS_MAX} vidéos publiées : masquez-en une avant d'en publier une autre.`, 'error');
+    }
+    const { error } = await supabase.from('videos').update({ published: !video.published }).eq('id', video.id);
+    if (error) return appMessage(error.message, 'error');
+    video.published = !video.published;
+    markPending();
+    return renderVideos();
+  }
+
+  const index = state.videos.indexOf(video);
+  const neighbour = state.videos[action === 'up' ? index - 1 : index + 1];
+  if (!neighbour) return;
+  let [a, b] = [video.sort_order, neighbour.sort_order];
+  if (a === b) b = a + (action === 'up' ? -1 : 1);
+  const results = await Promise.all([
+    supabase.from('videos').update({ sort_order: b }).eq('id', video.id),
+    supabase.from('videos').update({ sort_order: a }).eq('id', neighbour.id),
+  ]);
+  const failed = results.find((r) => r.error);
+  if (failed) return appMessage(failed.error.message, 'error');
+  video.sort_order = b;
+  neighbour.sort_order = a;
+  state.videos.sort((x, y) => x.sort_order - y.sort_order);
+  markPending();
+  renderVideos();
+});
+
+function openVideo(video = null) {
+  videoForm.current = video;
+  videoForm.meta = null;
+  $('#video-dialog-title').textContent = video ? 'Modifier la vidéo' : 'Nouvelle vidéo';
+  videoForm.title.value = video?.title ?? '';
+  videoForm.description.value = video?.description ?? '';
+  videoForm.tags.value = (video?.tags ?? []).join(', ');
+
+  const othersPublished = publishedVideosCount() - (video?.published ? 1 : 0);
+  const full = othersPublished >= VIDEOS_MAX;
+  videoForm.published.checked = video ? video.published : !full;
+  videoForm.published.disabled = full && !video?.published;
+  $('#video-published-hint').textContent = videoForm.published.disabled
+    ? `Déjà ${VIDEOS_MAX} vidéos publiées : masquez-en une depuis la liste.`
+    : `${othersPublished} / ${VIDEOS_MAX} déjà publiées. L'ordre suit celui de la liste.`;
+
+  videoForm.file.value = '';
+  videoForm.info.textContent = video ? `${formatDuration(video.duration_seconds)} · vidéo actuelle` : '';
+  if (video?.video_url) {
+    videoForm.preview.src = video.video_url;
+    videoForm.preview.hidden = false;
+    videoForm.hint.hidden = true;
+  } else {
+    videoForm.preview.removeAttribute('src');
+    videoForm.preview.hidden = true;
+    videoForm.hint.hidden = false;
+  }
+  resetDropZone(videoForm.poster, videoForm.posterPreview, videoForm.posterHint, video?.poster_url);
+  $('#video-delete').hidden = !video;
+  setMessage(videoForm.msg, '');
+  videoForm.dialog.showModal();
+}
+
+// Coupe la lecture de l'aperçu quand la fenêtre se ferme
+videoForm.dialog.addEventListener('close', () => videoForm.preview.pause());
+
+$('#video-new').addEventListener('click', () => openVideo());
+
+$('#video-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const current = videoForm.current;
+  const file = videoForm.file.files[0];
+  const posterFile = videoForm.poster.files[0];
+  if (!file && !current?.video_url) return setMessage(videoForm.msg, 'Ajoutez une vidéo.', 'error');
+  if (file && !videoForm.meta) return setMessage(videoForm.msg, 'Vidéo en cours d\'analyse, réessayez dans un instant.', 'error');
+
+  const title = videoForm.title.value.trim();
+  const uploaded = [];
+  try {
+    const record = {
+      title,
+      description: videoForm.description.value.trim(),
+      tags: videoForm.tags.value.split(',').map((t) => t.trim()).filter(Boolean),
+      published: videoForm.published.checked,
+    };
+
+    if (file) {
+      setMessage(videoForm.msg, `Envoi de la vidéo (${formatSize(file.size)})…`);
+      const ext = file.type === 'video/webm' ? 'webm' : 'mp4';
+      record.video_url = await uploadBlob(file, 'videos', title, ext, file.type || 'video/mp4');
+      uploaded.push(record.video_url);
+      record.duration_seconds = Number(videoForm.meta.duration.toFixed(2));
+    }
+    if (posterFile) {
+      setMessage(videoForm.msg, 'Envoi de la couverture…');
+      record.poster_url = await uploadImage(posterFile, 'videos', `${title}-cover`);
+      uploaded.push(record.poster_url);
+    } else if (file && videoForm.meta?.posterBlob) {
+      setMessage(videoForm.msg, 'Envoi de la couverture…');
+      record.poster_url = await uploadBlob(videoForm.meta.posterBlob, 'videos', `${title}-cover`, 'webp', 'image/webp');
+      uploaded.push(record.poster_url);
+    }
+
+    setMessage(videoForm.msg, 'Enregistrement…');
+    if (current) {
+      const { error } = await supabase.from('videos').update(record).eq('id', current.id);
+      if (error) throw error;
+      if (record.video_url) await removeImage(current.video_url);
+      if (record.poster_url) await removeImage(current.poster_url);
+    } else {
+      const maxOrder = Math.max(0, ...state.videos.map((v) => v.sort_order));
+      const { error } = await supabase.from('videos').insert({ ...record, sort_order: maxOrder + 10 });
+      if (error) throw error;
+    }
+    videoForm.dialog.close();
+    markPending();
+    appMessage(`Vidéo « ${title} » enregistrée. Pensez à publier sur le site.`, 'success');
+    await loadVideos();
+  } catch (error) {
+    // Pas de fichiers orphelins si l'enregistrement échoue
+    await Promise.all(uploaded.map((url) => removeImage(url).catch(() => {})));
+    setMessage(videoForm.msg, `Erreur : ${error.message}`, 'error');
+  }
+});
+
+$('#video-delete').addEventListener('click', async () => {
+  const video = videoForm.current;
+  if (!video || !confirm(`Supprimer définitivement la vidéo « ${video.title} » ?`)) return;
+  const { error } = await supabase.from('videos').delete().eq('id', video.id);
+  if (error) return setMessage(videoForm.msg, error.message, 'error');
+  await Promise.all([removeImage(video.video_url), removeImage(video.poster_url)]);
+  videoForm.dialog.close();
+  markPending();
+  appMessage(`Vidéo « ${video.title} » supprimée.`, 'success');
+  await loadVideos();
 });
 
 /* 5. Articles */

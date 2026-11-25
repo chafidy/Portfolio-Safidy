@@ -782,6 +782,21 @@
       </div>
     </section>
 
+    <!-- ============ MOTION (reels verticaux) ============ -->
+    <!-- Masquée tant qu'aucune vidéo n'est publiée : le build retire « hidden ». -->
+    <section class="motion" id="motion" aria-labelledby="motion-title" hidden>
+      <div class="container">
+        <span class="eyebrow">Vidéo &amp; Motion</span>
+        <h2 id="motion-title">Motion design</h2>
+        <p class="lead motion__lead">Reels, stories et habillages animés — survolez pour un aperçu, cliquez pour regarder avec le son.</p>
+
+        <ul class="reel-list" id="reel-list">
+          <!-- build:videos -->
+          <!-- /build:videos -->
+        </ul>
+      </div>
+    </section>
+
     <!-- ============ TÉMOIGNAGES ============ -->
     <section class="testimonials" id="testimonials" aria-labelledby="testimonials-title">
       <div class="container">
@@ -1097,6 +1112,44 @@
         <ul class="tag-list" id="lightbox-tags"></ul>
       </div>
     </div>
+  </dialog>
+
+  <!-- ============ LECTEUR STORIES (vidéos motion) ============ -->
+  <dialog class="story" id="story" aria-label="Lecteur vidéo">
+    <div class="story__frame">
+      <ol class="story__progress" id="story-progress" aria-hidden="true"></ol>
+      <video class="story__video" id="story-video" playsinline preload="auto"></video>
+      <button class="story__zone story__zone--prev" type="button" data-story="prev" aria-label="Vidéo précédente"></button>
+      <button class="story__zone story__zone--next" type="button" data-story="next" aria-label="Vidéo suivante"></button>
+      <div class="story__top">
+        <button class="story__icon" type="button" id="story-mute" aria-label="Couper le son" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H2v6h4l5 4V5z" />
+            <path class="story__icon-wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" />
+            <path class="story__icon-mute" d="m23 9-6 6M17 9l6 6" />
+          </svg>
+        </button>
+        <button class="story__icon" type="button" id="story-close" aria-label="Fermer la vidéo" autofocus>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="story__caption">
+        <h3 class="story__title" id="story-title"></h3>
+        <p class="story__text" id="story-text"></p>
+      </div>
+      <span class="story__paused" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+      </span>
+    </div>
+    <button class="story__nav story__nav--prev" type="button" data-story="prev" aria-label="Vidéo précédente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+    </button>
+    <button class="story__nav story__nav--next" type="button" data-story="next" aria-label="Vidéo suivante">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+    </button>
   </dialog>
 
   <!-- ============ CHAT BOT ASSISTANT ============ -->

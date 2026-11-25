@@ -28,6 +28,7 @@
 @import url('components/_lightbox.css');
 @import url('components/_chatbot.css');
 @import url('components/_cursor.css');
+@import url('components/_story.css');
 
 /* Sections */
 @import url('sections/_hero.css');
@@ -36,6 +37,7 @@
 @import url('sections/_services.css');
 @import url('sections/_process.css');
 @import url('sections/_projects.css');
+@import url('sections/_motion.css');
 @import url('sections/_blog.css');
 @import url('sections/_testimonials.css');
 @import url('sections/_community.css');
